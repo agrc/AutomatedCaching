@@ -18,7 +18,7 @@ class Scheduler(object):
         return command.execute()
     
     def _getChanges(self):
-        print "_getCachingStatus"
+        print "_getChanges"
         
         pass
         

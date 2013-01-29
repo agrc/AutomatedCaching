@@ -9,4 +9,4 @@ def TestGetChangesIsNotCalledIfCurrentlyCaching():
         s = Scheduler()
         s.start()
         
-        assert instance.assert_called_once_with()
+    assert mock.assert_called_once_with()
