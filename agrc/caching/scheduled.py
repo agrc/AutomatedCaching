@@ -24,8 +24,6 @@ class Runner(object):
         query = sde.AreasOfChangeQuery()
         return query.execute()
         
-        pass
-        
 #http://docs.python.org/2/tutoriCal/modules.html#executing-modules-as-scripts     
 if __name__ == "__main__":
     this = Runner()
