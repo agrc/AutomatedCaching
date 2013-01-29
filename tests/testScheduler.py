@@ -1,12 +1,33 @@
-from agrc.caching.scheduler import Scheduler
+from agrc.caching.scheduled import Runner
 from mock import Mock
 from mock import patch
 
-def TestGetChangesIsNotCalledIfCurrentlyCaching():    
-    with patch('agrc.caching.scheduler.cache.CacheStatusCommand') as mock:
-        instance = mock.return_value
-        instance.execute.return_value = True
-        s = Scheduler()
-        s.start()
+def testAreasOfChangeNotQueriedIfCurrentlyCaching():    
+    with patch('agrc.caching.scheduled.cache.CacheStatusCommand') as cacheMock:
+        with patch('agrc.caching.scheduled.sde.AreasOfChangeQuery') as queryMock:
+            cacheInstance = cacheMock.return_value
+            cacheInstance.execute.return_value = True
+            
+            queryInstance = queryMock.return_value
+            queryInstance.execute.return_value = []
+            
+            s = Runner()
+            s.start()
         
-    mock.assert_called_once_with()
+    cacheMock.assert_called_once_with()
+    assert not queryMock.execute.called
+    
+def testAreasOfChangeQueriedIfNotCaching():    
+    with patch('agrc.caching.scheduled.cache.CacheStatusCommand') as cacheMock:
+        with patch('agrc.caching.scheduled.sde.AreasOfChangeQuery') as queryMock:
+            cacheInstance = cacheMock.return_value
+            cacheInstance.execute.return_value = False
+            
+            queryInstance = queryMock.return_value
+            queryInstance.execute.return_value = []
+            
+            s = Runner()
+            s.start()
+        
+    cacheMock.assert_called_once_with()
+    queryMock.assert_called_once_with()
