@@ -5,11 +5,22 @@ from unittest import TestCase
 
 class ConnectTests(TestCase):
     def testCacheStatusCanGetAToken(self):
-        with patch('agrc.caching.config.Server') as server_mock:
-            server_instance = server_mock.return_value
-            server_instance.url.return_value = "localhost"
+        server = Server(use_port = True)
             
-            command = connect.GetTokenCommand()
-            token = command.execute()
+        command = connect.GetTokenCommand(server)
+        token = command.execute()
+        
+        self.assertIsNotNone(token)
+        self.assertGreater(len(token), 10, "token length is too small") 
             
-            self.assertIsNotNone(token)    
+    def testCacheStatusCanGetStatusJson(self):
+        server = Server(use_port = True)
+            
+        command = connect.GetTokenCommand(server)
+        token = command.execute()
+        
+        command = connect.GetServiceStatisticsCommand("CachingTools.GPServer", token, server)
+        stats = command.execute()
+        
+        self.assertIsNotNone(stats)
+        self.assertEqual(stats['summary']['busy'], 0, "busy stats should be 0")

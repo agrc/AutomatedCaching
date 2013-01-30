@@ -6,11 +6,13 @@ import os
 
 class GetTokenCommand(Command):
     section = "ArcGIS Admin Credentials"
+    _server = ""
     
-    def execute(self):
-        server = Server(use_port = True)
-        
-        token_url = server.get_token_url()
+    def __init__(self, server = Server()):
+        self._server = server
+    
+    def execute(self):      
+        token_url = self._server.get_token_url()
         
         credentials = self._get_arcgis_credentials()
           
@@ -47,15 +49,25 @@ class GetTokenCommand(Command):
 
 class GetServiceStatisticsCommand(Command):
     service_name = ""
-        
-    def __init__(self, service_name):
+    token = ""
+    _server = ""
+      
+    def __init__(self, service_name, token, server = Server()):
+        self._server = server
         self.service_name = service_name
+        self.token = token
     
     def execute(self):
-        server = Server()  
-        server.usePort = True
+        url = self._server.get_statistics_url(self.service_name)
         
-        url = server.get_statistics_url(self.service_name)
+        payload = {
+                   "token": self.token,
+                   'f': 'json' 
+                   }
         
-        return url  
-    
+        r = requests.get(url, params = payload)
+        
+        if r.status_code != requests.codes.ok:
+            r.raise_for_status()
+        
+        return r.json()     
