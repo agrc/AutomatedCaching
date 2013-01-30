@@ -4,12 +4,12 @@ class Command(object):
     
 class CachingProcess(object):
     socProcesses = "#"
-    servicePath = "" #
-    serviceName = "" #
+    servicePath = None #
+    serviceName = None #
     scales = [] #
-    scaleService = ""
-    areaOfInterest = "" # trumps updateExtent
+    scaleService = None
+    areaOfInterest = None# trumps updateExtent
 #    updateMode = "RECREATE_ALL_TILES"
     updateMode = "RECREATE_EMPTY_TILES"
     gdbPath = "C:\\Cache\\MapData\\UtahBaseMap-Data.gdb\\"
-    gp = ""
+    gp = None

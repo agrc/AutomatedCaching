@@ -6,7 +6,7 @@ import os
 
 class GetTokenCommand(Command):
     section = "ArcGIS Admin Credentials"
-    _server = ""
+    _server = None
     
     def __init__(self, server = Server()):
         self._server = server
@@ -48,9 +48,9 @@ class GetTokenCommand(Command):
         return user, password
 
 class GetServiceStatisticsCommand(Command):
-    service_name = ""
-    token = ""
-    _server = ""
+    service_name = None
+    token = None
+    _server = None
       
     def __init__(self, service_name, token, server = Server()):
         self._server = server
