@@ -11,6 +11,16 @@ class Runner(object):
             return
         
         changes = self._get_changes()
+        
+        if len(changes) == 0:
+            return
+        
+        self._process_areas_of_change(changes)
+        
+    def _process_areas_of_change(self, changes):
+        print "_process_areas_of_change"
+        
+        pass
 
     def _get_caching_status(self):
         print "_get_caching_status"
