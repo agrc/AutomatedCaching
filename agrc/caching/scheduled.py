@@ -5,21 +5,21 @@ class Runner(object):
     def start(self):
         print 'start'
         
-        isCurrentlyCaching = self._getCachingStatus()
+        caching = self._get_caching_status()
         
-        if isCurrentlyCaching:
+        if caching:
             return
         
-        changes = self._getChanges()
+        changes = self._get_changes()
 
-    def _getCachingStatus(self):
-        print "_getCachingStatus"
+    def _get_caching_status(self):
+        print "_get_caching_status"
         
         command = cache.CacheStatusCommand()
         return command.execute()
     
-    def _getChanges(self):
-        print "_getChanges"
+    def _get_changes(self):
+        print "_get_changes"
         
         query = sde.AreasOfChangeQuery()
         return query.execute()

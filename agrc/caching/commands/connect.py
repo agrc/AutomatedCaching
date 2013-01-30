@@ -8,12 +8,11 @@ class GetTokenCommand(Command):
     section = "ArcGIS Admin Credentials"
     
     def execute(self):
-        server = Server()
-        server.usePort = True
+        server = Server(use_port = True)
         
-        tokenUrl = server.getTokenUrl()
+        token_url = server.get_token_url()
         
-        credentials = self._getArcGisCredentials()
+        credentials = self._get_arcgis_credentials()
           
         payload = {
                    'username': credentials[0], 
@@ -21,7 +20,7 @@ class GetTokenCommand(Command):
                    'f': 'json'
         }
         
-        r = requests.post(tokenUrl, data = payload)
+        r = requests.post(token_url, data = payload)
         
         print r.text
         
@@ -32,7 +31,7 @@ class GetTokenCommand(Command):
         
         return response['token']
     
-    def _getArcGisCredentials(self):
+    def _get_arcgis_credentials(self):
         config = ConfigParser.RawConfigParser()
         
         file = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", 'secrets.cfg')
@@ -45,3 +44,18 @@ class GetTokenCommand(Command):
         password = config.get(self.section, "password")
         
         return user, password
+
+class GetServiceStatisticsCommand(Command):
+    service_name = ""
+        
+    def __init__(self, service_name):
+        self.service_name = service_name
+    
+    def execute(self):
+        server = Server()  
+        server.usePort = True
+        
+        url = server.get_statistics_url(self.service_name)
+        
+        return url  
+    
