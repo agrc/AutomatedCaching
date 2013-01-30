@@ -1,6 +1,6 @@
 class AreaOfChange(object):
-    Date = ""
-    Shape = ""
-    Editor = ""
-    Layer = "" #enum
-    CompletionDate = ""
+    date = ""
+    shape = ""
+    editor = ""
+    layer = "" #enum
+    completion_date = ""
