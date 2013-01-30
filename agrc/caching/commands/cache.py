@@ -3,7 +3,7 @@ from agrc.caching.commands import connect
 from agrc.caching.config import Server
 
 class CacheStatusCommand(Command):
-    _server = ""
+    _server = None
     
     def __init__(self, server = Server()):
         self._server = server
@@ -21,3 +21,17 @@ class CacheStatusCommand(Command):
             return True
         
         return False
+    
+class ProcessChangeGeometryCommand(Command):
+    _changes = None
+    _arcpy = None
+    
+    def __init__(self, changes, arcpy):
+        self._changes = changes
+        self._arcpy = arcpy
+    
+    def execute(self):
+        self._merge_geometries(changes)
+        
+    def _merge_geometries(self, changes):
+        pass

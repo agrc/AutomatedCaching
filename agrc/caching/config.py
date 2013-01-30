@@ -1,14 +1,14 @@
 class Server(object):
 	_baseurl_format = "http{0}://{1}{2}/{3}/"
-	_baseurl = ""
+	_baseurl = None
 	_token_url = "{0}tokens/generateToken"
 	_stats_url = "{0}admin/services/System/{1}/statistics"
 	
 	_use_https = False
 	_use_port = False
-	_instance = ""
-	_server = ""
-	_port = ""
+	_instance = None
+	_server = None
+	_port = None
 	
 	def __init__(self, server_name = "localhost", instance_name = "arcgis", use_https = False, use_port = False, port = "6080"):
 		self._use_https = use_https
