@@ -6,6 +6,8 @@ class CacheStatusCommand(Command):
     """
         Returns true if the number of busy instances on the server
         are greater than 0. This tells us the server is caching a job already.
+        
+        :keyword server: see :attr:`server`
     """
     
     #: the arcgis server configuration
@@ -32,6 +34,9 @@ class ProcessChangeGeometryCommand(Command):
     """
         Command to possibly normalize and dissolve geometries to be cached
         This class may be unused not sure yet.
+        
+        :keyword changes: see :attr:`changes`.
+        :keyword arcpy: see :attr:`arcpy`.
     """
     
     #: area of change 
@@ -59,6 +64,9 @@ class ProcessChangeGeometryCommand(Command):
 class ProccessJobCommand(Command):
     """
         A command for kicking off a cache
+        
+        :keyword job: see :attr:`job`.
+        :keyword arcpy: see :attr:`arcpy`.
     """
     
     #: The current job to cache
