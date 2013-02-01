@@ -1,5 +1,6 @@
 from agrc.caching.abstraction.base import Command
 from agrc.caching.models import CacheJob
+from agrc.caching import config
 
 class GetCacheJobFromAreaOfChangeCommand(Command):
     """
@@ -51,28 +52,8 @@ class GetUtmScaleFromLevelCommand(Command):
         `[14] => '1128.497176'`
         `[13, 14] => '2256.994353;1128.497176'`
         
-        :keyword level_scale_map: see :attr:`level_scale_map`
         :keyword levels: see :attr:`levels`
     """
-    
-    #: the mapping betten the cache level and the utm scale
-    level_scale_map = { 
-        0: '18489297.737236',
-        1: '9244648.868618',
-        2: '4622324.434309',
-        3: '2311162.217155',
-        4: '1155581.108577',
-        5: '577790.554289',
-        6: '288895.277144',
-        7: '144447.638572',
-        8: '72223.819286',
-        9: '36111.909643',
-        10: '18055.954822',
-        11: '9027.977411',
-        12: '4513.988705',
-        13: '2256.994353',
-        14: '1128.497176'
-    }
     
     #: the cache level as an array
     levels = None
@@ -81,6 +62,7 @@ class GetUtmScaleFromLevelCommand(Command):
         self.levels = levels
         
     def execute(self):
-        scales = [key for level, key in self.level_scale_map.iteritems() if level in self.levels]
+        scale_map = config.Scales().scale_map
+        scales = [key for level, key in scale_map.iteritems() if level in self.levels]
         
         return ';'.join(scales)

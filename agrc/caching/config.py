@@ -35,3 +35,47 @@ class Server(object):
 			port = ":{0}".format(self._port) 
 		
 		return self._baseurl_format.format(https, self._server, port, self._instance)
+	
+class BaseMap(object):
+	def get_low_quality(self):
+	    return 68
+
+	def get_high_quality(self):
+	    return 85
+	   
+	terrain = property(get_high_quality, None)
+	lite = property(get_high_quality, None)
+	hybrid = property(get_high_quality, None)
+	vector = property(get_high_quality, None)
+	hillshade = property(get_high_quality, None)
+	imagery = property(get_low_quality, None)
+	topo = property(get_high_quality, None)
+	
+class Scales(object):
+	#: the mapping betten the cache level and the utm scale
+	_level_scale_map = { 
+        0: '18489297.737236',
+        1: '9244648.868618',
+        2: '4622324.434309',
+        3: '2311162.217155',
+        4: '1155581.108577',
+        5: '577790.554289',
+        6: '288895.277144',
+        7: '144447.638572',
+        8: '72223.819286',
+        9: '36111.909643',
+        10: '18055.954822',
+        11: '9027.977411',
+        12: '4513.988705',
+        13: '2256.994353',
+        14: '1128.497176'
+    }
+	
+	def get_scales(self):
+		return self._level_scale_map
+	
+	def _get_scale_count(self):
+		return len(self._level_scale_map)
+	
+	scale_map = property(get_scales, None)
+	scale_count = property(_get_scale_count, None)
