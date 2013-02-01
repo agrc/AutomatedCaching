@@ -23,8 +23,8 @@ class testScales(TestCase):
         
         self.assertIsNotNone(jobs, "jobs are empty")
         self.assertEqual(4, len(jobs), "incorrect amount of jobs from changes {0}".format(len(jobs)))        
-        self.assertTrue(any(x.serviceName == "a" and 0 in x.levels and 1 in x.levels and 2 in x.levels for x in jobs))
-        self.assertTrue(any(x.serviceName == "c" and 3 in x.levels and 4 in x.levels for x in jobs))
+        self.assertTrue(any(x.service_name == "a" and 0 in x.levels and 1 in x.levels and 2 in x.levels for x in jobs))
+        self.assertTrue(any(x.service_name == "c" and 3 in x.levels and 4 in x.levels for x in jobs))
 
     def test_get_scales(self):
         command = scales.GetUtmScaleFromLevelCommand()
