@@ -1,3 +1,5 @@
+from agrc.caching import enums
+
 class AreaOfChange(object):
     """
         A representation of a row in a feature class which then represents 
@@ -49,5 +51,8 @@ class CacheJob(object):
     
     #: the date the job finished
     completion_date = None
+    
+    #: whether to recreate all tiles or just empty ones
+    update_mode = enums.CacheUpdateModes.modes.ALL
     
      
