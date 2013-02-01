@@ -1,4 +1,5 @@
 from agrc.caching.commands import cache
+from agrc.caching.commands import scales
 from agrc.caching.queries import sde
 
 class Runner(object):
@@ -15,12 +16,20 @@ class Runner(object):
         if len(changes) == 0:
             return
         
-        self._process_areas_of_change(changes)
+        jobs = self._process_areas_of_change(changes)
+        
+        for job in jobs:
+            self._process_job(job)
+        
+    def _process_job(self, job):
+        
+        pass
         
     def _process_areas_of_change(self, changes):
         print "_process_areas_of_change"
         
-        pass
+        command = scales.GetCacheJobFromAreaOfChangeCommand(changes)
+        return command.execute()
 
     def _get_caching_status(self):
         print "_get_caching_status"
