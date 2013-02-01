@@ -3,7 +3,17 @@ from agrc.caching.commands import scales
 from agrc.caching.queries import sde
 
 class Runner(object):
+    """
+        A class that is called to orchestrate caching.
+        A scheduled task will call this nightly to check 
+        for area of change features in SDE and create cache jobs
+        to instruct the system to update the affected caches.
+    """
+    
     def start(self):
+        """
+            main entry method to start the cache updating process
+        """
         print 'start'
         
         caching = self._get_caching_status()
