@@ -1,7 +1,8 @@
 from agrc.caching.abstraction.base import Command
 from agrc.caching.commands import connect
-from agrc.caching.config import Server
 from agrc.caching.commands import scales
+from agrc.caching import config
+from arcpy import CreateMapServerCache_server as create_schema
 
 class CacheStatusCommand(Command):
     """
@@ -14,7 +15,7 @@ class CacheStatusCommand(Command):
     #: the arcgis server configuration
     server = None
     
-    def __init__(self, server = Server()):
+    def __init__(self, server = config.Server()):
         self.server = server
         
     def execute(self):
@@ -87,4 +88,61 @@ class ProccessJobCommand(Command):
         command = scales.GetUtmScaleFromLevelCommand(levels)
         return command.execute()
     
+class CreateCacheSchemaCommand(Command):
     
+    #: the agrc.caching.enums.BaseMaps.names
+    basemap = None
+    
+    #: location to store tiles
+    caching_path = None
+    
+    #: location to admin connection file for caching server
+    connection_file_path = None
+    
+    #: the tile orgin centroid
+    tile_origin = None
+    
+    #: image type to save tiles as
+    tile_format = None
+    
+    #: defines tiling scheme type
+    tiling_scheme = "NEW"
+    
+    #: the tiling scheme type
+    scheme_type = "CUSTOM"
+    
+    #: number of scales
+    number_of_scales = None
+    
+    #: image resolution
+    dpi = None
+    
+    #: pixel size of tiles
+    tile_size = None
+    
+    #: individual files or many files in cluster
+    storage_format = "COMPACT" #"EXPLODED"
+    
+    #: smush it
+    compression = None
+    
+    #: the string of scales
+    scales = None
+    
+    #: the full path to the service through the connection file
+    service_path = None
+    
+    def __init__(self, basemap_name, tile_orgin = "-5120900 9998100", tile_format = "JPEG",
+                 dpi =  "96", tile_size = "256 x 256", number_of_scales = config.Scales().scale_count,
+                 compression = "96"):
+        self.basemap = basemap_name
+        self.tile_origin = tile_orgin
+        self.tile_format = tile_format
+        self.dpi = dpi
+        self.tile_size = tile_size
+        self.number_of_scales = number_of_scales
+        self.compression = compression
+        
+    def execute(self):
+        result = create_schema()
+        pass
