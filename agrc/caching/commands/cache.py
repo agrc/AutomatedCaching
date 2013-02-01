@@ -1,6 +1,7 @@
 from agrc.caching.abstraction.base import Command
 from agrc.caching.commands import connect
 from agrc.caching.config import Server
+from agrc.caching.commands import scales
 
 class CacheStatusCommand(Command):
     """
@@ -75,11 +76,15 @@ class ProccessJobCommand(Command):
     #: arcgis python module
     arcpy = None
     
-    def __init__(self, job, arcpy):
+    def __init__(self, job, arcpy = None):
         self.job = job
         self.arcpy = arcpy
         
     def execute(self):
-        pass
+        levels = self._get_scales_from_levels(self.job.levels)
+    
+    def _get_scales_from_levels(self, levels):
+        command = scales.GetUtmScaleFromLevelCommand(levels)
+        return command.execute()
     
     
