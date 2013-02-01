@@ -25,5 +25,16 @@ class testScales(TestCase):
         self.assertEqual(4, len(jobs), "incorrect amount of jobs from changes {0}".format(len(jobs)))        
         self.assertTrue(any(x.serviceName == "a" and 0 in x.levels and 1 in x.levels and 2 in x.levels for x in jobs))
         self.assertTrue(any(x.serviceName == "c" and 3 in x.levels and 4 in x.levels for x in jobs))
-                
-            
+
+    def test_get_scales(self):
+        command = scales.GetUtmScaleFromLevelCommand()
+        command.levels = [0]
+        
+        result = command.execute()
+        
+        self.assertEqual(result, "18489297.737236")
+        
+        command.levels = [0,1,2]
+        result = command.execute()
+        
+        self.assertEqual(result, "18489297.737236;9244648.868618;4622324.434309")

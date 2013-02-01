@@ -77,10 +77,10 @@ class GetUtmScaleFromLevelCommand(Command):
     #: the cache level as an array
     levels = None
     
-    def __init__(self, levels):
+    def __init__(self, levels = None):
         self.levels = levels
         
     def execute(self):
-        scales = [key for level, key in levelScaleMap.iteritems() if level in levels]
+        scales = [key for level, key in self.level_scale_map.iteritems() if level in self.levels]
         
         return ';'.join(scales)
