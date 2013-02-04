@@ -32,6 +32,13 @@ class Runner(object):
             self._process_job(job)
         
     def _process_job(self, job):
+        # update data
+        
+        # create cache schema
+        command = cache.CreateCacheSchemaCommand(job.service_name)
+        command.execute()
+        
+        # cache tiles
         
         pass
         
