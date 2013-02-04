@@ -39,8 +39,8 @@ class Runner(object):
         command.execute()
         
         # cache tiles
-        
-        pass
+        command = cache.CreateTilesCommand(job.service_name)
+        command.execute()
         
     def _process_areas_of_change(self, changes):
         print "_process_areas_of_change"
