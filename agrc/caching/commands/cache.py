@@ -5,6 +5,7 @@ from agrc.caching import config
 from arcpy.caching.enums import Arcpy
 #http://resources.arcgis.com/en/help/main/10.1/index.html#//005400000004000000
 from arcpy import CreateMapServerCache_server as create_schema
+import time
 
 class CacheStatusCommand(Command):
     """
