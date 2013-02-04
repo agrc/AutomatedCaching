@@ -17,3 +17,16 @@ class BaseMaps(object):
                 TOPO = "topo",
                 HILLSHADE = "hillshade",
                 HYBRID = "hybrid")
+
+class Arcpy(object):
+    status = enum(New = 0,
+                  Submitted = 1,
+                    Waiting = 2,
+                    Executing = 3,
+                    Succeeded = 4,
+                    Failed = 5,
+                    Timed_out = 6,
+                    Cancelling = 7,
+                    Cancelled = 8,
+                    Deleting = 9,
+                    Deleted = 10)
