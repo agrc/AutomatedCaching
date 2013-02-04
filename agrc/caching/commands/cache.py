@@ -3,8 +3,10 @@ from agrc.caching.commands import connect
 from agrc.caching.commands import scales
 from agrc.caching import config
 from arcpy.caching.enums import Arcpy
-#http://resources.arcgis.com/en/help/main/10.1/index.html#//005400000004000000
+# http://resources.arcgis.com/en/help/main/10.1/index.html#//005400000004000000
 from arcpy import CreateMapServerCache_server as create_schema
+# http://resources.arcgis.com/en/help/main/10.1/index.html#/Manage_Map_Server_Cache_Tiles/00540000000p000000/
+from arcpy import ManageMapServerCacheTiles_server as create_tiles
 import time
 
 class CacheStatusCommand(Command):
@@ -168,3 +170,48 @@ class CreateCacheSchemaCommand(Command):
             
         resultValue = result.getMessages()
         print "{0} completed with messages {1}".format(result.toolname, str(resultValue))
+        
+class UpdateTilesCommand(object):
+    #: the path to where the arcgis connection file is stored
+    #  "\\connection\file\{0}".format(self.serviceName)
+    service_path = None
+    
+    #: the name of the map service to cache
+    #: will concatentation with service_path
+    basemap = None
+    
+    #: location to admin connection file for caching server
+    connection_file_path = None
+    
+    #: the string of scales
+    scales = None
+    
+    #: whether to recreate all tiles or only empty ones
+    update_mode = CacheUpdateModes.modes.ALL
+    
+    #: the number of processes to throw at a cache
+    number_of_processes = 4
+    
+    #: the extent to update, trumped by area_of_interest
+    update_extent = "#"
+    
+    def __init__(self, basemap_name):
+        pass
+    
+    def execute(self):
+        result = create_tiles(
+                              self.service_path,
+                              self.scales,
+                              self.update_mode,
+                              self.number_of_processes,
+                              self.area_of_interest,
+                              self.update_extent,
+                              "WAIT")
+        
+        while result.status < Arcpy.Succeeded:
+            print "sleeping"
+            time.sleep(1)
+            
+        resultValue = result.getMessages()
+        print "{0} completed with messages {1}".format(result.toolname, str(resultValue))
+        
