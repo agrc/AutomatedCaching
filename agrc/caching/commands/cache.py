@@ -171,10 +171,9 @@ class CreateCacheSchemaCommand(Command):
         resultValue = result.getMessages()
         print "{0} completed with messages {1}".format(result.toolname, str(resultValue))
         
-class CreateTilesCommand(object):
-    #: the path to where the arcgis connection file is stored
-    #  "\\connection\file\{0}".format(self.serviceName)
-    service_path = None
+class CreateTilesCommand(object):  
+    #: path to feature class with geometreis of polygon to recache 
+    area_of_interest = None
     
     #: the name of the map service to cache
     #: will concatentation with service_path
@@ -183,20 +182,37 @@ class CreateTilesCommand(object):
     #: location to admin connection file for caching server
     connection_file_path = None
     
+    #: the number of processes to throw at a cache
+    number_of_processes = 4
+    
     #: the string of scales
     scales = None
+    
+    #: concatenation of connection file and baseap
+    #  "\\connection\file\{0}".format(self.serviceName)
+    service_path = None
     
     #: whether to recreate all tiles or only empty ones
     update_mode = CacheUpdateModes.modes.ALL
     
-    #: the number of processes to throw at a cache
-    number_of_processes = 4
-    
     #: the extent to update, trumped by area_of_interest
     update_extent = "#"
     
-    def __init__(self, basemap_name):
-        pass
+    def __init__(self, basemap_name, 
+                 connection_file_path = None, 
+                 service_path = None, 
+                 scales = None, 
+                 update_mode = None, 
+                 number_of_processes = None, 
+                 area_of_interest = None):
+        
+        self.basemap = basemap_name
+        self.service_path = service_path or self.service_path
+        self.connection_file_path = connection_file_path or self.connection_file_path
+        self.scales = scales or self.scales
+        self.update_mode = update_mode or self.update_mode
+        self.area_of_interest = area_of_interest or self.area_of_interest
+        self.number_of_processes = number_of_processes or self.number_of_processes
     
     def execute(self):
         result = create_tiles(
