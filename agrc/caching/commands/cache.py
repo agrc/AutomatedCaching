@@ -171,7 +171,7 @@ class CreateCacheSchemaCommand(Command):
         resultValue = result.getMessages()
         print "{0} completed with messages {1}".format(result.toolname, str(resultValue))
         
-class UpdateTilesCommand(object):
+class CreateTilesCommand(object):
     #: the path to where the arcgis connection file is stored
     #  "\\connection\file\{0}".format(self.serviceName)
     service_path = None
