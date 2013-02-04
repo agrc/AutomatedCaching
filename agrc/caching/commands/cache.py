@@ -2,6 +2,8 @@ from agrc.caching.abstraction.base import Command
 from agrc.caching.commands import connect
 from agrc.caching.commands import scales
 from agrc.caching import config
+from arcpy.caching.enums import Arcpy
+#http://resources.arcgis.com/en/help/main/10.1/index.html#//005400000004000000
 from arcpy import CreateMapServerCache_server as create_schema
 
 class CacheStatusCommand(Command):
@@ -144,5 +146,25 @@ class CreateCacheSchemaCommand(Command):
         self.compression = compression
         
     def execute(self):
-        result = create_schema()
-        pass
+        result = create_schema(
+                               self.basemap,
+                               self.caching_path,
+                               self.tiling_scheme,
+                               self.scheme_type,
+                               self.number_of_scales,
+                               self.dpi,
+                               self.tile_size,
+                               "#",
+                               self.tile_origin,
+                               self.scales,
+                               self.tile_format,
+                               self.compression,
+                               self.storage_format)
+        
+        while result.status < Arcpy.Succeeded:
+            print "sleeping"
+            time.sleep(1)
+            
+        resultValue = result.getMessages()
+        report.write ("{0} completed with messages {1}".format(result.toolname, 
+                                                               str(resultValue))
