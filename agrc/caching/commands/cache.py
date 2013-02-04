@@ -166,5 +166,4 @@ class CreateCacheSchemaCommand(Command):
             time.sleep(1)
             
         resultValue = result.getMessages()
-        report.write ("{0} completed with messages {1}".format(result.toolname, 
-                                                               str(resultValue))
+        print "{0} completed with messages {1}".format(result.toolname, str(resultValue))
