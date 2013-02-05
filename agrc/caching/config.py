@@ -1,3 +1,5 @@
+from os import getcwd
+
 class Server(object):
 	_baseurl_format = "http{0}://{1}{2}/{3}/"
 	_baseurl = None
@@ -99,4 +101,9 @@ class Scales(object):
 	scale_count = property(_get_scale_count, None)
 
 class Geodatabase(object):
-	path = "../data/AreaOfChange.gdb"
+	base_path = getcwd()
+	path = "\data\AreasOfChange.gdb"
+	#"C:\Users\mapserv\Desktop\Projects\GitHub\AutomatedCaching\data\AreasOfChange.gdb"
+	#"../data/AreaOfChange.gdb"
+	changeFeatureClass = "AreasOfChange"
+	jobFeatureClass = "CacheJob"
