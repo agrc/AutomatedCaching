@@ -2,7 +2,7 @@ from unittest import TestCase
 from agrc.caching.models import AreaOfChange
 from agrc.caching.commands import dto
 
-class testScales(TestCase):
+class TestDto(TestCase):
     def testFourCacheJobsCreatedForDifferentScaleGroupsOfSameLayer(self):
         """scale groups are groups of levels
                 Groups

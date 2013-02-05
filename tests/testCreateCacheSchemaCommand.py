@@ -2,7 +2,7 @@ from unittest import TestCase
 from agrc.caching.commands import cache
 from agrc.caching import models
 
-class testCreateCacheSchemaCommand(TestCase):
+class TestCreateCacheSchemaCommand(TestCase):
     def test_schema_gets_default_values(self):
         job = models.CacheJob([0,1,2], "terrain")
         command = cache.CreateCacheSchemaCommand(job)

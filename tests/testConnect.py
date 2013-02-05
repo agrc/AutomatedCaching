@@ -4,8 +4,8 @@ from agrc.caching.config import Server
 from unittest import TestCase
 from nose.tools import nottest
 
-@nottest
-class ConnectTests(TestCase):
+#@nottest
+class TestConnectTests(TestCase):
     def testCacheStatusCanGetAToken(self):
         server = Server(use_port = True)
             

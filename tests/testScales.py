@@ -1,7 +1,7 @@
 from unittest import TestCase
 from agrc.caching.commands import scales
 
-class testScales(TestCase):
+class TestScales(TestCase):
     def test_get_scales(self):
         command = scales.GetUtmScaleFromLevelCommand()
         command.levels = [0]

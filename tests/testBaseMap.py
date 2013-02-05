@@ -2,7 +2,7 @@ from unittest import TestCase
 from agrc.caching.config import BaseMap
 from nose.tools import nottest
 
-class testBaseMap(TestCase):
+class TestBaseMap(TestCase):
     def testGetCompressionLevel(self):
         basemap = BaseMap()
         
