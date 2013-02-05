@@ -137,17 +137,19 @@ class CreateCacheSchemaCommand(Command):
     #: the full path to the service through the connection file
     service_path = None
     
-    def __init__(self, basemap_name, tile_orgin = None, tile_format = None,
+    def __init__(self, basemap_name, tile_origin = None, tile_format = None,
                  dpi = None, tile_size = None, number_of_scales = None,
                  compression = None):
         
         self.basemap = basemap_name
-        self.tile_origin = tile_orgin or self.tile_origin
+        self.tile_origin = tile_origin or self.tile_origin
         self.tile_format = tile_format or self.tile_format
         self.dpi = dpi or self.dpi
         self.tile_size = tile_size or self.tile_size
-        self.number_of_scales = number_of_scales or config.Scales().scale_count
-        self.compression = compression or config.BaseMap.get_compression_level(basemap_name)
+        scales = config.Scales()
+        self.number_of_scales = number_of_scales or scales.scale_count
+        basemap = config.BaseMap()
+        self.compression = compression or basemap.get_compression_level(basemap_name)
         
     def execute(self):
         result = create_schema(
