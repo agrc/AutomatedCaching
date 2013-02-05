@@ -97,3 +97,6 @@ class Scales(object):
 	
 	scale_map = property(get_scales, None)
 	scale_count = property(_get_scale_count, None)
+
+class Geodatabase(object):
+	path = "../data/AreaOfChange.gdb"
