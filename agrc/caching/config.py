@@ -43,6 +43,24 @@ class BaseMap(object):
 	def get_high_quality(self):
 	    return 85
 	   
+	def get_compression_level(self, service_name):
+		service_name = service_name.upper()
+		
+		if "TERRAIN" in service_name:
+			return self.terrain
+		if "LITE" in service_name:
+			return self.lite
+		if "HYBRID" in service_name:
+			return self.hybrid
+		if "VECTOR" in service_name:
+			return self.vector
+		if "HILLSHADE" in service_name:
+			return self.hillshade
+		if "IMAGERY" in service_name:
+			return self.imagery
+		if "TOPO" in service_name:
+			return self.topo		 
+	   
 	terrain = property(get_high_quality, None)
 	lite = property(get_high_quality, None)
 	hybrid = property(get_high_quality, None)

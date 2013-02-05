@@ -2,7 +2,7 @@ from agrc.caching.abstraction.base import Command
 from agrc.caching.commands import connect
 from agrc.caching.commands import scales
 from agrc.caching import config
-from arcpy.caching.enums import Arcpy
+from agrc.caching import enums
 # http://resources.arcgis.com/en/help/main/10.1/index.html#//005400000004000000
 from arcpy import CreateMapServerCache_server as create_schema
 # http://resources.arcgis.com/en/help/main/10.1/index.html#/Manage_Map_Server_Cache_Tiles/00540000000p000000/
@@ -105,10 +105,10 @@ class CreateCacheSchemaCommand(Command):
     connection_file_path = None
     
     #: the tile orgin centroid
-    tile_origin = None
+    tile_origin = "-5120900 9998100"
     
     #: image type to save tiles as
-    tile_format = None
+    tile_format = "JPEG"
     
     #: defines tiling scheme type
     tiling_scheme = "NEW"
@@ -120,10 +120,10 @@ class CreateCacheSchemaCommand(Command):
     number_of_scales = None
     
     #: image resolution
-    dpi = None
+    dpi = "96"
     
     #: pixel size of tiles
-    tile_size = None
+    tile_size = "256 x 256"
     
     #: individual files or many files in cluster
     storage_format = "COMPACT" #"EXPLODED"
@@ -137,16 +137,17 @@ class CreateCacheSchemaCommand(Command):
     #: the full path to the service through the connection file
     service_path = None
     
-    def __init__(self, basemap_name, tile_orgin = "-5120900 9998100", tile_format = "JPEG",
-                 dpi =  "96", tile_size = "256 x 256", number_of_scales = config.Scales().scale_count,
-                 compression = "96"):
+    def __init__(self, basemap_name, tile_orgin = None, tile_format = None,
+                 dpi = None, tile_size = None, number_of_scales = None,
+                 compression = None):
+        
         self.basemap = basemap_name
-        self.tile_origin = tile_orgin
-        self.tile_format = tile_format
-        self.dpi = dpi
-        self.tile_size = tile_size
-        self.number_of_scales = number_of_scales
-        self.compression = compression
+        self.tile_origin = tile_orgin or self.tile_origin
+        self.tile_format = tile_format or self.tile_format
+        self.dpi = dpi or self.dpi
+        self.tile_size = tile_size or self.tile_size
+        self.number_of_scales = number_of_scales or config.Scales().scale_count
+        self.compression = compression or config.BaseMap.get_compression_level(basemap_name)
         
     def execute(self):
         result = create_schema(
@@ -193,7 +194,7 @@ class CreateTilesCommand(object):
     service_path = None
     
     #: whether to recreate all tiles or only empty ones
-    update_mode = CacheUpdateModes.modes.ALL
+    update_mode = enums.CacheUpdateModes.modes.ALL
     
     #: the extent to update, trumped by area_of_interest
     update_extent = "#"
