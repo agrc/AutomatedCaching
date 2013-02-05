@@ -201,7 +201,7 @@ class CreateTilesCommand(object):
     #: the extent to update, trumped by area_of_interest
     update_extent = "#"
     
-    def __init__(self, basemap_name, 
+    def __init__(self, cache_job, 
                  connection_file_path = None, 
                  service_path = None, 
                  scales = None, 
@@ -209,11 +209,11 @@ class CreateTilesCommand(object):
                  number_of_processes = None, 
                  area_of_interest = None):
         
-        self.basemap = basemap_name
+        self.basemap = cache_job.service_name
+        self.scales = cache_job.scales or scales or self.scales
+        self.update_mode = cache_job.update_mode or update_mode or self.update_mode
         self.service_path = service_path or self.service_path
         self.connection_file_path = connection_file_path or self.connection_file_path
-        self.scales = scales or self.scales
-        self.update_mode = update_mode or self.update_mode
         self.area_of_interest = area_of_interest or self.area_of_interest
         self.number_of_processes = number_of_processes or self.number_of_processes
     

@@ -53,6 +53,6 @@ class CacheJob(object):
     completion_date = None
     
     #: whether to recreate all tiles or just empty ones
-    update_mode = enums.CacheUpdateModes.modes.ALL
+    update_mode = None
     
      
