@@ -1,4 +1,3 @@
-from mock import Mock, patch
 from unittest import TestCase
 from agrc.caching.config import Server
 
