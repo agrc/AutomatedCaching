@@ -21,12 +21,13 @@ class AreasOfChangeQuery(Command):
         print env.workspace
         
         changes = []
-        with da.SearchCursor(settings.changeFeatureClass, "*",
+        with da.SearchCursor(settings.change_feature_class, "*",
                              where_clause = self._where_clause()) as cursor:
             for row in cursor:
                 change = models.AreaOfChange(row = row)
                 changes.append(change)
-                
+             
+        changes = sorted(changes, key=lambda change: change.creation_date)   
         return changes
     
     def _where_clause(self):      

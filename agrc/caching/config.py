@@ -108,7 +108,7 @@ class Geodatabase(object):
 	path = "\AreasOfChange.gdb"
 	
 	#: the name of the feature class for changes
-	changeFeatureClass = "AreasOfChange"
+	change_feature_class = "AreasOfChange"
 	
 	#: the name of the feature class for caching jobs
-	jobFeatureClass = "CacheJob"
+	job_feature_class = "CacheJob"
