@@ -34,9 +34,9 @@ class GetTokenCommand(Command):
     def _get_arcgis_credentials(self):
         config = ConfigParser.RawConfigParser()
         
-        file = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", 'secrets.cfg')
+        secrets = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", 'secrets.cfg')
         
-        config.read(file)
+        config.read(secrets)
         
         user = config.get(self.section, "username")
         password = config.get(self.section, "password")
