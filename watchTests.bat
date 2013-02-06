@@ -1,1 +1,1 @@
-rerun -i AreasOfChange.gdb nosetests -c nose.cfg
+rerun -i=AreasOfChange.gdb,.git nosetests -c nose.cfg
