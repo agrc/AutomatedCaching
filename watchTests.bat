@@ -1,1 +1,1 @@
-rerun nosetests
+rerun -i AreasOfChange.gdb nosetests -c nose.cfg
