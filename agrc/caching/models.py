@@ -7,12 +7,27 @@ class AreaOfChange(object):
         an area of change in a layer that is used in a cache and needs to be updated
     """
     
-    def __init__(self, levels=[], layer = ""):
+    def __init__(self, levels = [], layer = None, row = None):
+        if row is not None:
+            self.id = row[0]
+            self.creation_date = row[2]
+            self.start_date = row[3]
+            self.completion_date = row[4]
+            self.layer = row[5]
+            self.levels = [x.strip() for x in row[6].split(",")]
+            self.editor = row[7]
+        
         self.levels = levels
         self.layer = layer
         
+    #: the object id in sde
+    id = None
+        
     #: the date the change was made
-    date = None
+    creation_date = None
+    
+    #: day it was picked up to a cache job
+    start_date = None
     
     #: the geometry of the area where there are positive and negative changes
     shape = None
