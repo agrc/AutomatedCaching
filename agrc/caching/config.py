@@ -101,9 +101,14 @@ class Scales(object):
 	scale_count = property(_get_scale_count, None)
 
 class Geodatabase(object):
+	#: the path to where the py script is running
 	base_path = getcwd()
+	
+	#: the path to where the gdb is sitting - will need to modify this for sde probably
 	path = "\data\AreasOfChange.gdb"
-	#"C:\Users\mapserv\Desktop\Projects\GitHub\AutomatedCaching\data\AreasOfChange.gdb"
-	#"../data/AreaOfChange.gdb"
+	
+	#: the name of the feature class for changes
 	changeFeatureClass = "AreasOfChange"
+	
+	#: the name of the feature class for caching jobs
 	jobFeatureClass = "CacheJob"

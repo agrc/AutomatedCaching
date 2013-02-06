@@ -2,10 +2,13 @@ from agrc.caching.abstraction.base import Command
 from agrc.caching import config
 from arcpy import env
 from arcpy import da
-from time import time
-
 
 class AreasOfChangeQuery(Command):
+    """
+        Queries geodata where startdate is null meaning the area of change
+        hasn't been picked up yet and started.
+    """
+    
     def execute(self):
         # query sde get new changes
         return self._query_sde_for_new_changes()
@@ -22,6 +25,6 @@ class AreasOfChangeQuery(Command):
                 
         return changes
     
-    def _where_clause(self):
+    def _where_clause(self):      
         return "StartDate Is NULL"
         
