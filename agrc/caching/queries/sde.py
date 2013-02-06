@@ -1,5 +1,6 @@
 from agrc.caching.abstraction.base import Command
 from agrc.caching import config
+from agrc.caching import models
 from arcpy import env
 from arcpy import da
 
@@ -23,7 +24,8 @@ class AreasOfChangeQuery(Command):
         with da.SearchCursor(settings.changeFeatureClass, "*",
                              where_clause = self._where_clause()) as cursor:
             for row in cursor:
-                changes.append(row)
+                change = models.AreaOfChange(row = row)
+                changes.append(change)
                 
         return changes
     
