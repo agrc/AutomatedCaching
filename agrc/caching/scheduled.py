@@ -1,6 +1,7 @@
 from agrc.caching.commands import cache
 from agrc.caching.commands import dto
 from agrc.caching.queries import sde
+from agrc.caching import config
 
 class Runner(object):
     """
@@ -16,7 +17,9 @@ class Runner(object):
         """
         print 'start'
         
-        caching = self._get_caching_status()
+        server = config.Server(use_port = True)
+        
+        caching = self._get_caching_status(server)
         
         if caching:
             print "The server is busy. Exiting"
@@ -54,10 +57,10 @@ class Runner(object):
         command = dto.GetCacheJobFromAreaOfChangeCommand(changes)
         return command.execute()
 
-    def _get_caching_status(self):
+    def _get_caching_status(self, server = config.Server()):
         print "_get_caching_status"
         
-        command = cache.CacheStatusCommand()
+        command = cache.CacheStatusCommand(server)
         return command.execute()
     
     def _get_changes(self):
