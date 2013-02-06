@@ -24,8 +24,6 @@ class GetTokenCommand(Command):
         
         r = requests.post(token_url, data = payload)
         
-        print r.text
-        
         if r.status_code != requests.codes.ok:
             r.raise_for_status()
         
@@ -37,8 +35,6 @@ class GetTokenCommand(Command):
         config = ConfigParser.RawConfigParser()
         
         file = os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", 'secrets.cfg')
-        
-        print file
         
         config.read(file)
         

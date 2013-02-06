@@ -3,6 +3,7 @@ from agrc.caching.commands import connect
 from agrc.caching.commands import scales
 from agrc.caching import config
 from agrc.caching import enums
+import arcpy
 # http://resources.arcgis.com/en/help/main/10.1/index.html#//005400000004000000
 from arcpy import CreateMapServerCache_server as create_schema
 # http://resources.arcgis.com/en/help/main/10.1/index.html#/Manage_Map_Server_Cache_Tiles/00540000000p000000/

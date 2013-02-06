@@ -15,7 +15,9 @@ class AreasOfChangeQuery(Command):
     
     def _query_sde_for_new_changes(self):      
         settings = config.Geodatabase()
-        env.workspace = "{0}\{1}".format(settings.base_path, settings.path)
+        env.workspace = "{0}{1}".format(settings.base_path, settings.path)
+        
+        print env.workspace
         
         changes = []
         with da.SearchCursor(settings.changeFeatureClass, "*",

@@ -1,4 +1,4 @@
-from os import getcwd
+from os import path
 
 class Server(object):
 	_baseurl_format = "http{0}://{1}{2}/{3}/"
@@ -102,10 +102,10 @@ class Scales(object):
 
 class Geodatabase(object):
 	#: the path to where the py script is running
-	base_path = getcwd()
+	base_path = path.join(path.abspath(path.dirname(__file__)), "..\..", "data")
 	
 	#: the path to where the gdb is sitting - will need to modify this for sde probably
-	path = "\data\AreasOfChange.gdb"
+	path = "\AreasOfChange.gdb"
 	
 	#: the name of the feature class for changes
 	changeFeatureClass = "AreasOfChange"
