@@ -23,5 +23,6 @@ class AreasOfChangeQuery(Command):
         return changes
     
     def _where_clause(self):
+        #:"StartDate" > date '2013-01-20' AND "StartDate" Is Not NULL
         return "StartDate Is NULL"
         
