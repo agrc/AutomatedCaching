@@ -1,5 +1,4 @@
 from agrc.caching.scheduled import Runner
-from agrc.caching import config
 from agrc.caching.models import AreaOfChange
 from mock import patch
 
