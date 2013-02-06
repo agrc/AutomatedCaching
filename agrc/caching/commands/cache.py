@@ -168,7 +168,7 @@ class CreateCacheSchemaCommand(Command):
                                self.compression,
                                self.storage_format)
         
-        while result.status < Arcpy.Succeeded:
+        while result.status < enums.Arcpy.Succeeded:
             print "sleeping"
             time.sleep(1)
             
@@ -228,7 +228,7 @@ class CreateTilesCommand(object):
                               self.update_extent,
                               "WAIT")
         
-        while result.status < Arcpy.Succeeded:
+        while result.status < enums.Arcpy.Succeeded:
             print "sleeping"
             time.sleep(1)
             
