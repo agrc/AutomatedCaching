@@ -1,6 +1,8 @@
 from unittest import TestCase
 from agrc.caching.config import Server
+from nose.tools import nottest
 
+@nottest
 class testServerConfigGetTokenUrl(TestCase):
     def testUseHttpsReturnsUrlStartingWithHttps(self):
         server = Server(use_https = True)
@@ -23,7 +25,8 @@ class testServerConfigGetTokenUrl(TestCase):
                 
         print url
         self.assertEqual(url, "http://agrc:6080/arcgis/tokens/generateToken", "port not added correctly")
-        
+
+@nottest
 class testServerConfigGetStatsurl(TestCase):
     def testUseHttpsReturnsUrlStartingWithHttps(self):
         server = Server(use_https = True)

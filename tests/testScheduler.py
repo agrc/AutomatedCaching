@@ -4,7 +4,7 @@ from mock import patch
 from nose.tools import nottest
 from unittest import TestCase
 
-#@nottest
+@nottest
 class TestScheduleRunner(TestCase):
     
     @patch('agrc.caching.scheduled.sde.AreasOfChangeQuery')
