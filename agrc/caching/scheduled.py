@@ -19,16 +19,22 @@ class Runner(object):
         caching = self._get_caching_status()
         
         if caching:
+            print "The server is busy. Exiting"
             return
         
         changes = self._get_changes()
+        total_changes = len(changes)
         
-        if len(changes) == 0:
+        if total_changes == 0:
+            print "There is nothing to cache. Exiting."
             return
+        
+        print "There are {0} areas of change. Processing...".format(total_changes)
         
         jobs = self._process_areas_of_change(changes)
         
         for job in jobs:
+            print "Processing job {0}.".format(job.service_name)
             self._process_job(job)
         
     def _process_job(self, job):
