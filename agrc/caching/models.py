@@ -56,12 +56,8 @@ class CacheJob(object):
     #: whether to recreate all tiles or just empty ones
     update_mode = None
     
-    scales = None
-    
     def get_scales_from_levels(self):
         command = scales.GetUtmScaleFromLevelCommand(self.levels)
         return command.execute()
     
     scales = property(get_scales_from_levels, None)
-    
-     
