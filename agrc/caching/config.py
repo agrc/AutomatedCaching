@@ -40,11 +40,11 @@ class Server(object):
 	
 class BaseMap(object):
 	def get_low_quality(self):
-	    return 68
+		return 68
 
 	def get_high_quality(self):
-	    return 85
-	   
+		return 85
+
 	def get_compression_level(self, service_name):
 		service_name = service_name.upper()
 		
@@ -62,7 +62,7 @@ class BaseMap(object):
 			return self.imagery
 		if "TOPO" in service_name:
 			return self.topo		 
-	   
+
 	terrain = property(get_high_quality, None)
 	lite = property(get_high_quality, None)
 	hybrid = property(get_high_quality, None)
