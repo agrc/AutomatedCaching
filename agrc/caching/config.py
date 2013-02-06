@@ -105,10 +105,16 @@ class Geodatabase(object):
 	base_path = path.join(path.abspath(path.dirname(__file__)), "..\..", "data")
 	
 	#: the path to where the gdb is sitting - will need to modify this for sde probably
-	path = "\AreasOfChange.gdb"
+	@property
+	def path(self):
+		return "\AreasOfChange.gdb"
 	
 	#: the name of the feature class for changes
-	change_feature_class = "AreasOfChange"
+	@property
+	def change_feature_class(self):
+		return "AreasOfChange"
 	
 	#: the name of the feature class for caching jobs
-	job_feature_class = "CacheJob"
+	@property
+	def job_feature_class(self):
+		return "CacheJob"
