@@ -31,4 +31,7 @@ class TestConnect(TestCase):
         query = sde.AreasOfChangeQuery()
         result = query.execute()
         
+        print dir(result)
+        
         self.assertLess(result[0].creation_date, result[1].creation_date, "order is wrong")
+        self.assertLess(result[1].creation_date, result[2].creation_date, "order is wrong")
