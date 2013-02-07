@@ -41,6 +41,9 @@ class GetMapNamesContainingLayerCommand(Command):
         self.levels = levels or self.levels
         
     def get_layer(self):
+        if self._layer is None:
+            return None
+        
         return self._layer.upper()
     
     def set_layer(self, layer):
@@ -55,6 +58,6 @@ class GetMapNamesContainingLayerCommand(Command):
                         # union into master set
                         maps |= set(self._layer_scale_name_map[layer_key][scale])   
                                   
-        return maps
+        return list(maps)
     
     layer = property(get_layer, set_layer)
