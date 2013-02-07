@@ -21,8 +21,8 @@ class AreasOfChangeQuery(Command):
         changes = []
         with SearchCursor(settings.change_feature_class, "*",
                              where_clause = self._where_clause()) as cursor:
-            for row in cursor:
-                change = models.AreaOfChange(row = row)
+            for change in cursor:
+                change = models.AreaOfChange(change = change)
                 changes.append(change)
              
         changes = sorted(changes, key=lambda change: change.creation_date)   

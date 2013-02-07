@@ -1,20 +1,21 @@
 from agrc.caching.commands import scales
+from agrc.caching.commands import layer
 
 class AreaOfChange(object):
     """
-        A representation of a row in a feature class which then represents 
+        A representation of a change in a feature class which then represents 
         an area of change in a layer that is used in a cache and needs to be updated
     """
     
-    def __init__(self, levels = None, layer = None, row = None):
-        if row is not None:
-            self.id = row[0]
-            self.creation_date = row[2]
-            self.start_date = row[3]
-            self.completion_date = row[4]
-            self.layer = row[5]
-            self.levels = [x.strip() for x in row[6].split(",")]
-            self.editor = row[7]
+    def __init__(self, levels = None, layer = None, change = None):
+        if change is not None:
+            self.id = change[0]
+            self.creation_date = change[2]
+            self.start_date = change[3]
+            self.completion_date = change[4]
+            self.layer = change[5]
+            self.levels = [x.strip() for x in change[6].split(",")]
+            self.editor = change[7]
         
         self.levels = levels or self.levels
         self.layer = layer or self.layer
@@ -48,9 +49,16 @@ class CacheJob(object):
         A representation of a cache service that is going to be updated
     """
     
-    def __init__(self, levels=[], service_name = ""):
-        self.levels = levels
-        self.service_name = service_name
+    def __init__(self, levels = None, service_name = None, change = None):
+        if change is not None:
+            self.creation_date = change.creation_date
+            self.start_date = "current date"
+            self.layer = change.layer
+            self.levels = change.levels
+            self.editor = change.editor
+            
+        self.levels = levels or self.levels
+        self.service_name = service_name or self.get_maps_from_layer(self.layer)
     
     #: the name of the map service to cache    
     service_name = None
@@ -71,7 +79,11 @@ class CacheJob(object):
     update_mode = None
     
     def get_scales_from_levels(self):
-        command = scales.GetUtmScaleFromLevelCommand(self.levels)
+        command = scales.GetUtmScaleFromLevelCommand(self)
+        return command.execute()
+    
+    def get_maps_from_layer(self, job):
+        command = layer.GetMapNamesContainingLayerCommand(job)
         return command.execute()
     
     scales = property(get_scales_from_levels, None)
