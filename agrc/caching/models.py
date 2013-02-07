@@ -57,7 +57,7 @@ class CacheJob(object):
             self.editor = change.editor
            
         self.levels = levels 
-        self.service_name = service_name or self.get_maps_from_layer(self.layer)
+        self.service_name = service_name or self.get_maps_from_layer(self)
     
     #: the name of the map service to cache    
     service_name = None
@@ -82,7 +82,7 @@ class CacheJob(object):
         return command.execute()
     
     def get_maps_from_layer(self, job):
-        command = layer.GetMapNamesContainingLayerCommand(job)
+        command = layer.GetMapNamesContainingLayerCommand(job = job)
         return command.execute()
     
     scales = property(get_scales_from_levels, None)
