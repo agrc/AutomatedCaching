@@ -39,7 +39,7 @@ class Runner(object):
         jobs = self._process_areas_of_change(changes)
         
         for job in jobs:
-            print "Processing job {0}.".format(job.service_name)
+            print "Processing job {0} for {1}.".format(job.service_name, job.editor)
             self._process_job(job)
         
     def _process_job(self, job):
