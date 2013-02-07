@@ -1,4 +1,3 @@
-from agrc.caching import enums
 from agrc.caching.commands import scales
 
 class AreaOfChange(object):
@@ -7,7 +6,7 @@ class AreaOfChange(object):
         an area of change in a layer that is used in a cache and needs to be updated
     """
     
-    def __init__(self, levels = [], layer = None, row = None):
+    def __init__(self, levels = None, layer = None, row = None):
         if row is not None:
             self.id = row[0]
             self.creation_date = row[2]
@@ -17,8 +16,8 @@ class AreaOfChange(object):
             self.levels = [x.strip() for x in row[6].split(",")]
             self.editor = row[7]
         
-        self.levels = levels
-        self.layer = layer
+        self.levels = levels or self.levels
+        self.layer = layer or self.layer
         
     #: the object id in sde
     id = None
