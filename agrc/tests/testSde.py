@@ -1,10 +1,8 @@
-from agrc.caching.queries import sde
 from unittest import TestCase
-from nose.tools import nottest
 from mock import patch, Mock
+from agrc.caching.queries import sde
 from agrc.caching.config import Geodatabase
 
-#@nottest 
 class TestConnect(TestCase):
     
     @patch.object(Geodatabase,'change_feature_class')

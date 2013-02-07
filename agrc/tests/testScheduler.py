@@ -1,10 +1,8 @@
+from unittest import TestCase
+from mock import patch
 from agrc.caching.scheduled import Runner
 from agrc.caching.models import AreaOfChange
-from mock import patch
-from nose.tools import nottest
-from unittest import TestCase
 
-@nottest
 class TestScheduleRunner(TestCase):
     
     @patch('agrc.caching.scheduled.sde.AreasOfChangeQuery')

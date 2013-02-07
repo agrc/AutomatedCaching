@@ -1,8 +1,6 @@
 from unittest import TestCase
 from agrc.caching.commands import scales
-from nose.tools import nottest
 
-@nottest 
 class TestScales(TestCase):
     def test_get_scales(self):
         command = scales.GetUtmScaleFromLevelCommand()
