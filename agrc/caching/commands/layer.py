@@ -49,16 +49,12 @@ class GetMapNamesContainingLayerCommand(Command):
     def execute(self):
         maps = set()
         for layer_key in self._layer_scale_name_map.keys():
-            print layer_key
             if layer_key == self.layer:
-                for scale in self.levels:
-                    print scale
-                    scale = int(scale)
-                    
-                    # union into master set
-                    maps |= set(self._layer_scale_name_map[layer_key][scale])
-        for i in maps:
-            print i                           
+                for scale in self.levels:  
+                    if scale in self._layer_scale_name_map[layer_key].keys():
+                        # union into master set
+                        maps |= set(self._layer_scale_name_map[layer_key][scale])   
+                                  
         return maps
     
     layer = property(get_layer, set_layer)
