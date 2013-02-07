@@ -18,8 +18,6 @@ class AreasOfChangeQuery(Command):
         settings = config.Geodatabase()
         env.workspace = "{0}{1}".format(settings.base_path, settings.path)
         
-        print env.workspace
-        
         changes = []
         with da.SearchCursor(settings.change_feature_class, "*",
                              where_clause = self._where_clause()) as cursor:
