@@ -34,7 +34,7 @@ class GetCacheJobFromAreaOfChangeCommand(Command):
             if len(intersection) == 0:
                 continue
             
-            job = CacheJob(intersection, change)
+            job = CacheJob(levels = intersection, change = change)
             
             result.append(job)
         

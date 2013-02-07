@@ -14,7 +14,7 @@ class AreaOfChange(object):
             self.start_date = row[3]
             self.completion_date = row[4]
             self.layer = row[5]
-            self.levels = [x.strip() for x in row[6].split(",")]
+            self.levels = [int(x.strip()) for x in row[6].split(",")]
             self.editor = row[7]
         
         self.levels = levels or self.levels
@@ -54,10 +54,9 @@ class CacheJob(object):
             self.creation_date = change.creation_date
             self.start_date = "current date"
             self.layer = change.layer
-            self.levels = change.levels
             self.editor = change.editor
-            
-        self.levels = levels or self.levels
+           
+        self.levels = levels 
         self.service_name = service_name or self.get_maps_from_layer(self.layer)
     
     #: the name of the map service to cache    
