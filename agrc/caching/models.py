@@ -56,7 +56,7 @@ class CacheJob(object):
             self.layer = change.layer
             self.editor = change.editor
            
-        self.levels = levels 
+        self.levels = levels
         self.service_name = service_name or self.get_maps_from_layer(self)
     
     #: the name of the map service to cache    
@@ -68,11 +68,20 @@ class CacheJob(object):
     #: the levels to recache
     levels = None
     
+    #: the layer of change
+    layer = None
+    
+    #: the date the job was created
+    creation_date = None
+    
     #: the date the job started
     start_date = None
     
     #: the date the job finished
     completion_date = None
+    
+    #: the person who created the change
+    editor = None
     
     #: whether to recreate all tiles or just empty ones
     update_mode = None
