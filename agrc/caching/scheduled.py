@@ -25,11 +25,13 @@ class Runner(object):
             print "The server is busy. Exiting"
             return
         
+        print "The server is free. Looking for changes..."
+        
         changes = self._get_changes()
         total_changes = len(changes)
         
         if total_changes == 0:
-            print "There is nothing to cache. Exiting."
+            print "There are no changes. Exiting."
             return
         
         print "There are {0} areas of change. Processing...".format(total_changes)

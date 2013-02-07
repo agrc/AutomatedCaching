@@ -2,7 +2,7 @@ from agrc.caching.abstraction.base import Command
 from agrc.caching import config
 from agrc.caching import models
 from arcpy import env
-from arcpy import da
+from arcpy.da import SearchCursor
 
 class AreasOfChangeQuery(Command):
     """
@@ -19,13 +19,14 @@ class AreasOfChangeQuery(Command):
         env.workspace = "{0}{1}".format(settings.base_path, settings.path)
         
         changes = []
-        with da.SearchCursor(settings.change_feature_class, "*",
+        with SearchCursor(settings.change_feature_class, "*",
                              where_clause = self._where_clause()) as cursor:
             for row in cursor:
                 change = models.AreaOfChange(row = row)
                 changes.append(change)
              
         changes = sorted(changes, key=lambda change: change.creation_date)   
+        
         return changes
     
     def _where_clause(self):      
