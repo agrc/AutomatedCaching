@@ -1,9 +1,9 @@
-from unittest import TestCase
+from unittest import TestCase, main
 from agrc.caching.models import AreaOfChange
 from agrc.caching.commands import dto
 
 class TestDto(TestCase):
-    def testFourCacheJobsCreatedForDifferentScaleGroupsOfSameLayer(self):
+    def test_four_cache_jobs_created_four_different_scale_groups_of_same_layer(self):
         """scale groups are groups of levels
                 Groups
                     0-2
@@ -23,5 +23,6 @@ class TestDto(TestCase):
         
         self.assertIsNotNone(jobs, "jobs are empty")
         self.assertEqual(4, len(jobs), "incorrect amount of jobs from changes {0}".format(len(jobs)))        
-        self.assertTrue(any(x.service_name == "a" and 0 in x.levels and 1 in x.levels and 2 in x.levels for x in jobs))
-        self.assertTrue(any(x.service_name == "c" and 3 in x.levels and 4 in x.levels for x in jobs))
+        
+if __name__=='__main__':
+    main()

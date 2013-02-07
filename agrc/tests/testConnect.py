@@ -1,6 +1,6 @@
 from agrc.caching.commands import connect
 from agrc.caching.config import Server
-from unittest import TestCase
+from unittest import TestCase, main
 
 class TestConnectTests(TestCase):
     def testCacheStatusCanGetAToken(self):
@@ -23,3 +23,6 @@ class TestConnectTests(TestCase):
         
         self.assertIsNotNone(stats)
         self.assertEqual(stats['summary']['busy'], 0, "busy stats should be 0")
+        
+if __name__=='__main__':
+    main()

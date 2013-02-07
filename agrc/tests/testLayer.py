@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, main
 from mock import patch, Mock
 from agrc.caching.commands import layer
 
@@ -19,10 +19,14 @@ class TestLayer(TestCase):
                                      }
                                  })
         
-        command = layer.GetMapNamesContainingLayerCommand(layer = "roads", levels=['0','1','2','3'])
-
-        result = list(command.execute())
+        command = layer.GetMapNamesContainingLayerCommand(layer = "roads", levels=[0,1,2,3])
+        result = command.execute()
+        
+        for i in result:
+            print i
         
         self.assertEqual(len(result), len(["a","b","c","d","e"]), "lists are different")
         self.assertItemsEqual(result, ["a","b","c","d","e"], "list don't contain same elements")
-        
+
+if __name__=='__main__':
+    main()

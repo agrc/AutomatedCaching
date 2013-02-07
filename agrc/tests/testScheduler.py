@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, main
 from mock import patch
 from agrc.caching.scheduled import Runner
 from agrc.caching.models import AreaOfChange
@@ -31,3 +31,6 @@ class TestScheduleRunner(TestCase):
             
         assert cache_mock.called
         assert query_mock.called
+
+if __name__=='__main__':
+    main()

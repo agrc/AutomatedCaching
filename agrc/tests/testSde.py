@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, main
 from mock import patch, Mock
 from agrc.caching.queries import sde
 from agrc.caching.config import Geodatabase
@@ -51,3 +51,6 @@ class TestConnect(TestCase):
         result = query.execute()
         
         self.assertEqual(len(result), 0, "There is only one area of change needing attention")
+        
+if __name__=='__main__':
+    main()

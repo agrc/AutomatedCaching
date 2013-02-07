@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, main
 from agrc.caching.config import Server
 
 class testServerConfigGetTokenUrl(TestCase):
@@ -47,3 +47,6 @@ class testServerConfigGetStatsurl(TestCase):
         url = server.get_statistics_url("CachingTools.GPServer")
         
         self.assertEqual(url, "http://agrc:6080/arcgis/admin/services/System/CachingTools.GPServer/statistics", "port not added correctly")
+        
+if __name__=='__main__':
+    main()

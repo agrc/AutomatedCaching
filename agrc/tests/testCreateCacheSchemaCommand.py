@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, main
 from agrc.caching.commands import cache
 from agrc.caching import models
 
@@ -17,3 +17,6 @@ class TestCreateCacheSchemaCommand(TestCase):
         self.assertEqual(command.storage_format, "COMPACT", "s format")
         self.assertEqual(command.compression, 85, "compression")
         self.assertEqual(command.basemap, "terrain", "service")
+        
+if __name__=='__main__':
+    main()
