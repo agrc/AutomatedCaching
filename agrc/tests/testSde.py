@@ -25,6 +25,10 @@ class TestSde(TestCase):
                 self.assertEqual(i.layer, "Roads", "layer is offf")
                 self.assertEqual(i.levels, [0,1,2], "levels off")
                 self.assertEqual(i.editor, "User1", "user is off")
+                
+                return
+        
+        self.assertTrue(False, "shouldn't get here")
 
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
