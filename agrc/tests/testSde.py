@@ -3,7 +3,7 @@ from mock import patch, Mock
 from agrc.caching.queries import sde
 from agrc.caching.config import Geodatabase
 
-class TestConnect(TestCase):
+class TestSde(TestCase):
     
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
@@ -16,6 +16,15 @@ class TestConnect(TestCase):
         
         self.assertIsNotNone(result, "query is broken")
         self.assertEqual(len(result), 3, "no areas of change")
+        
+        for i in result:
+            if i.id == 1:
+                self.assertTrue(i.creation_date.isoformat().startswith("2013-01-01"), "date is off")
+                self.assertEqual(i.start_date, None, "start date off")
+                self.assertEqual(i.completion_date, None, "completion off")
+                self.assertEqual(i.layer, "Roads", "layer is offf")
+                self.assertEqual(i.levels, [0,1,2], "levels off")
+                self.assertEqual(i.editor, "User1", "user is off")
 
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
