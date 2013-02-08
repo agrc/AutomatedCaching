@@ -16,6 +16,8 @@ class AreaOfChange(object):
             self.layer = row[4]
             self.levels = [int(x.strip()) for x in row[5].split(",")]
             self.editor = row[6]
+            if len(row) == 8:
+                self.shape = row[7]
         
         self.levels = levels or self.levels
         self.layer = layer or self.layer
@@ -68,7 +70,7 @@ class CacheJob(object):
     service_name = None
     
     #: the geometry to update
-    geometry = None
+    shape = None
     
     #: the levels to recache
     levels = None
@@ -92,7 +94,7 @@ class CacheJob(object):
     update_mode = None
     
     def get_scales_from_levels(self):
-        command = scales.GetUtmScaleFromLevelCommand(self)
+        command = scales.GetUtmScaleFromLevelCommand(self.levels)
         return command.execute()
     
     def get_maps_from_layer(self, job):

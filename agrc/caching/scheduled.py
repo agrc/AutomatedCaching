@@ -38,11 +38,37 @@ class Runner(object):
         
         jobs = self._process_areas_of_change(changes)
         
-        for job in jobs:
-            print "Processing job {0} for {1}.".format(job.service_name, job.editor)
-            self._process_job(job)
+        jobs = self._process_jobs(jobs)
         
-    def _process_job(self, job):
+        #: requery gdb for updated items
+#        for job in jobs:
+#            print "Processing job {0} for {1}.".format(job.service_name, job.editor)
+#            self._cache_job(job)
+    
+        print "done"
+    
+    def _process_jobs(self, jobs):
+        """
+            Handles the cache jobs. Inserts the records into the database
+            Modifies the geometries
+        """
+        print "_process_jobs"
+        
+        for job in jobs:
+            for service in job.service_name:
+                command = sde.InsertCacheJob(job, service)
+                command.execute()
+        
+        return jobs
+    
+    def _cache_job(self, job):
+        """
+            Updates the cache data, 
+            builds the affected layer list from the basemaps?
+            creates the caching schema
+            creates the tiles
+        """
+        print "_cach_job"
         # update data
         
         # create cache schema
@@ -54,6 +80,9 @@ class Runner(object):
         command.execute()
         
     def _process_areas_of_change(self, changes):
+        """
+           Turns the areas of change into cache jobs 
+        """
         print "_process_areas_of_change"
         
         command = dto.GetCacheJobFromAreaOfChangeCommand(changes)

@@ -109,10 +109,6 @@ class Geodatabase(object):
 	def changes_path(self):
 		return "\AreasOfChange.gdb"
 	
-	@property
-	def job_pah(self):
-		return "\CacheJobs.gdb"
-	
 	#: the name of the feature class for changes
 	@property
 	def change_feature_class(self):

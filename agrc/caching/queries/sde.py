@@ -2,7 +2,7 @@ from agrc.caching.abstraction.base import Command
 from agrc.caching import config
 from agrc.caching import models
 from arcpy import env
-from arcpy.da import SearchCursor, UpdateCursor, InsertCursor
+from arcpy.da import SearchCursor, UpdateCursor, InsertCursor, Editor
 from datetime import datetime
 
 class AreasOfChangeQuery(Command):
@@ -32,7 +32,7 @@ class AreasOfChangeQuery(Command):
     
     @property
     def _fields(self):
-        return ['OBJECTID', 'CreationDate', 'StartDate', 'CompletionDate', 'Layer', 'Levels', 'Editor']
+        return ['OID@', 'CreationDate', 'StartDate', 'CompletionDate', 'Layer', 'Levels', 'Editor']
     
     @property
     def _where_clause(self):      
@@ -46,26 +46,43 @@ class InsertCacheJob(Command):
     #: cache job
     job = None
     
+    #: the map service to cache
+    service = None
+    
     def __init__(self, job, service):
         self.job = job
-        pass
+        self.service = service
     
     def execute(self):
         settings = config.Geodatabase()
-        env.workspace = "{0}{1}".format(settings.base_path, settings.changes_path)
+        path = "{0}{1}".format(settings.base_path, settings.changes_path)
         
-        with UpdateCursor(settings.change_feature_class, self._change_fields,
+        env.workspace = path
+#        edit = Editor(path)
+#        
+#        edit.startEditing(False, False)
+        
+        with SearchCursor(settings.change_feature_class, self._change_fields,
                              where_clause = self._where_clause(self.job.reference_id)) as updater:
             for row in updater:
-                row[3] = datetime.now().isoformat()
+#                row[3] = datetime.now().isoformat()
 #                updater.updateRow(row)
-                with InsertCursor(settings.job_feature_class) as inserter:
-                    pass
+                with InsertCursor(settings.job_feature_class, self._job_fields) as inserter:
+                    inserter.insertRow((datetime.now(),
+                                        self.job.scales,
+                                        self.service,
+                                        self.job.update_mode#,row[7]
+                                        ))
+                    
+#        edit.stopEditing(True)
     
     @property
     def _change_fields(self):
-        return ['OBJECTID', 'CreationDate', 'StartDate', 'Layer', 'Levels', 'Editor', 'SHAPE@']
-         
+        return ['OID@', 'CreationDate', 'StartDate',  'CompletionDate', 'Layer', 'Levels', 'Editor', 'SHAPE@']
     
+    @property
+    def _job_fields(self):
+        return ['StartDate','Levels','MapService', 'UpdateMode']#,'SHAPE@']
+         
     def _where_clause(self, oid):      
-        return "OID@ == {0}".format(oid)
+        return "OBJECTID = {0}".format(oid)
