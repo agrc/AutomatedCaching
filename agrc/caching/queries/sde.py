@@ -58,15 +58,15 @@ class InsertCacheJob(Command):
         path = "{0}{1}".format(settings.base_path, settings.changes_path)
         
         env.workspace = path
-#        edit = Editor(path)
-#        
-#        edit.startEditing(False, False)
+        edit = Editor(path)
+        
+        edit.startEditing(False, False)
         
         with UpdateCursor(settings.change_feature_class, self._change_fields,
                              where_clause = self._where_clause(self.job.reference_id)) as updater:
             for row in updater:
-#                row[3] = datetime.now()
-#                updater.updateRow(row)
+                row[3] = datetime.now()
+                updater.updateRow(row)
                 with InsertCursor(settings.job_feature_class, self._job_fields) as inserter:
                     inserter.insertRow((datetime.now(),
                                         self.job.scales,
@@ -75,7 +75,7 @@ class InsertCacheJob(Command):
                                         row[7]
                                         ))
                     
-#        edit.stopEditing(True)
+        edit.stopEditing(True)
     
     @property
     def _change_fields(self):
