@@ -62,16 +62,17 @@ class InsertCacheJob(Command):
 #        
 #        edit.startEditing(False, False)
         
-        with SearchCursor(settings.change_feature_class, self._change_fields,
+        with UpdateCursor(settings.change_feature_class, self._change_fields,
                              where_clause = self._where_clause(self.job.reference_id)) as updater:
             for row in updater:
-#                row[3] = datetime.now().isoformat()
+#                row[3] = datetime.now()
 #                updater.updateRow(row)
                 with InsertCursor(settings.job_feature_class, self._job_fields) as inserter:
                     inserter.insertRow((datetime.now(),
                                         self.job.scales,
                                         self.service,
-                                        self.job.update_mode#,row[7]
+                                        self.job.update_mode,
+                                        row[7]
                                         ))
                     
 #        edit.stopEditing(True)
@@ -82,7 +83,7 @@ class InsertCacheJob(Command):
     
     @property
     def _job_fields(self):
-        return ['StartDate','Levels','MapService', 'UpdateMode']#,'SHAPE@']
+        return ['StartDate','Levels','MapService', 'UpdateMode','SHAPE@']
          
     def _where_clause(self, oid):      
         return "OBJECTID = {0}".format(oid)

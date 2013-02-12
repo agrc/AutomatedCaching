@@ -64,6 +64,14 @@ class TestSde(TestCase):
         result = query.execute()
         
         self.assertEqual(len(result), 0, "There is only one area of change needing attention")
+    
+    @patch.object(Geodatabase,'change_feature_class')
+    @patch.object(Geodatabase,'changes_path')
+    def test_can_insert_into_gdb(self, path_mock, fc_mock):       
+        path_mock.__get__ = Mock(return_value="\Test_AreaOfChange.gdb")
+        fc_mock.__get__ = Mock(return_value="CacheJob_Inserts")
         
+        
+    
 if __name__=='__main__':
     main()
