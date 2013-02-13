@@ -88,10 +88,10 @@ class ProccessJobCommand(Command):
         self.arcpy = arcpy
         
     def execute(self):
-        levels = self._get_scales_from_levels(self.job.levels)
+        level = self._get_scales_from_levels(self.job.level)
     
-    def _get_scales_from_levels(self, levels):
-        command = scales.GetUtmScaleFromLevelCommand(levels)
+    def _get_scales_from_levels(self, level):
+        command = scales.GetUtmScaleFromLevelCommand(level)
         return command.execute()
     
 class CreateCacheSchemaCommand(Command):
@@ -148,7 +148,7 @@ class CreateCacheSchemaCommand(Command):
         self.dpi = dpi or self.dpi
         self.tile_size = tile_size or self.tile_size
         scales = config.Scales()
-        self.number_of_scales = len(cache_job.levels) or number_of_scales or scales.scale_count
+        self.number_of_scales = len(cache_job.level) or number_of_scales or scales.scale_count
         basemap = config.BaseMap()
         self.compression = compression or basemap.get_compression_level(self.basemap)
         

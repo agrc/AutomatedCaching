@@ -29,9 +29,9 @@ class GetMapNamesContainingLayerCommand(Command):
     
     _layer = None
     
-    def __init__(self, layer = None, job = None):
-        if job is not None:
-            self.layer = job.layer
+    def __init__(self, layer = None, change = None):
+        if change is not None:
+            self.layer = change.layer
         
         self.layer = layer or self._layer
         

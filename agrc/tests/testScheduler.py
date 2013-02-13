@@ -25,7 +25,7 @@ class TestScheduleRunner(TestCase):
         cache_instance.execute.return_value = False
         
         query_instance = query_mock.return_value
-        query_instance.execute.return_value = [AreaOfChange([0,1,2], "roads")]
+        query_instance.execute.return_value = [AreaOfChange("roads")]
         
         job_instance = job_mock.return_value
         job_instance.execute.return_value = []

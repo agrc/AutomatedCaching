@@ -7,19 +7,17 @@ class AreaOfChange(object):
         an area of change in a layer that is used in a cache and needs to be updated
     """
     
-    def __init__(self, levels = None, layer = None, row = None):
+    def __init__(self, layer = None, row = None):
         if row is not None:
             self.id = row[0]
             self.creation_date = row[1]
             self.start_date = row[2]
             self.completion_date = row[3]
             self.layer = row[4]
-            self.levels = [int(x.strip()) for x in row[5].split(",")]
             self.editor = row[6]
             if len(row) == 8:
                 self.shape = row[7]
-        
-        self.levels = levels or self.levels
+
         self.layer = layer or self.layer
         
     #: the object id in sde
@@ -40,9 +38,6 @@ class AreaOfChange(object):
     #: the layer the change happened on
     layer = None #enum
     
-    #: the levels the layer is present in
-    levels = None
-    
     #: the date the area was updated. ie: when the new cache tiles were created
     completion_date = None
     
@@ -51,16 +46,17 @@ class CacheJob(object):
         A representation of a cache service that is going to be updated
     """
     
-    def __init__(self, levels = None, service_name = None, change = None, object_id = None):
+    def __init__(self, level = None, service_name = None, change = None, object_id = None):
         if change is not None:
             self.creation_date = change.creation_date
             self.start_date = "current date"
             self.layer = change.layer
             self.editor = change.editor
             self.reference_id = change.id
-           
-        self.levels = levels
-        self.service_name = service_name or self.get_maps_from_layer(self)
+            self.level = level
+                  
+        self.level = level or self.level
+        self.service_name = service_name
         self.reference_id = object_id or self.reference_id
     
     #: refrence id to its area of change polygon
@@ -72,8 +68,8 @@ class CacheJob(object):
     #: the geometry to update
     shape = None
     
-    #: the levels to recache
-    levels = None
+    #: the level to recache
+    level = None
     
     #: the layer of change
     layer = None
@@ -94,11 +90,7 @@ class CacheJob(object):
     update_mode = None
     
     def get_scales_from_levels(self):
-        command = scales.GetUtmScaleFromLevelCommand(self.levels)
+        command = scales.GetUtmScaleFromLevelCommand(self.level)
         return command.execute()
-    
-    def get_maps_from_layer(self, job):
-        command = layer.GetMapNamesContainingLayerCommand(job = job)
-        return command.execute()
-    
+
     scales = property(get_scales_from_levels, None)
