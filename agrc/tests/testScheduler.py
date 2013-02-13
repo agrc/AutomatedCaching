@@ -17,7 +17,7 @@ class TestScheduleRunner(TestCase):
         assert cache_mock.called
         assert not query_mock.called
     
-    @patch('agrc.caching.scheduled.dto.GetCacheJobFromAreaOfChangeCommand')
+    @patch('agrc.caching.scheduled.dto.GetCacheJobItemsFromAreaOfChangeCommand')
     @patch('agrc.caching.scheduled.sde.AreasOfChangeQuery')
     @patch('agrc.caching.scheduled.cache.CacheStatusCommand')  
     def test_areas_of_change_queried_if_not_caching(self, cache_mock, query_mock, job_mock):

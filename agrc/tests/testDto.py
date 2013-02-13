@@ -22,7 +22,7 @@ class TestDto(TestCase):
         changes = []
         changes.append(AreaOfChange("ROADS"))
         
-        command = dto.GetCacheJobFromAreaOfChangeCommand(changes)
+        command = dto.GetCacheJobItemsFromAreaOfChangeCommand(changes)
         jobs = command.execute()
         
         self.assertIsNotNone(jobs, "jobs are empty")
@@ -50,7 +50,7 @@ class TestDto(TestCase):
         changes.append(AreaOfChange("ROADS"))
         changes.append(AreaOfChange("COUNties"))
         
-        command = dto.GetCacheJobFromAreaOfChangeCommand(changes)
+        command = dto.GetCacheJobItemsFromAreaOfChangeCommand(changes)
         jobs = command.execute()
         
         self.assertIsNotNone(jobs, "jobs are empty")

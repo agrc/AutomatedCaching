@@ -4,7 +4,7 @@ from arcpy import env
 from arcpy.da import UpdateCursor, InsertCursor, Editor
 from datetime import datetime
 
-class InsertCacheJobCommand(Command):
+class InsertCacheJobItemCommand(Command):
     """
         Responsible for creating records in cache job feature class
     """

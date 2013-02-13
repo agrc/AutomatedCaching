@@ -80,7 +80,7 @@ class TestInsertCacheJob(TestCase):
         place = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
         env.workspace = place
         try:
-            create_fc(place, "CacheJob_Inserts_testing", template="CacheJob_Inserts")
+            create_fc(place, "CacheJobItems_testing", template="CacheJobItems")
         except ExecuteError:
             "cache jobs not created"
         
@@ -92,7 +92,7 @@ class TestInsertCacheJob(TestCase):
     def tearDown(self):
         env.workspace = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
         try:
-            delete_fc("CacheJob_Inserts_testing")
+            delete_fc("CacheJobItems_testing")
         except ExecuteError:
             "job not deleted"
         
@@ -106,7 +106,7 @@ class TestInsertCacheJob(TestCase):
     @patch.object(Geodatabase,'changes_path')
     def test_can_insert_into_gdb(self, path_mock, fc_change_mock, fc_job_mock):       
         path_mock.__get__ = Mock(return_value="\Test_AreaOfChange.gdb")
-        fc_job_mock.__get__ = Mock(return_value="CacheJob_Inserts_testing")
+        fc_job_mock.__get__ = Mock(return_value="CacheJobItems_testing")
         fc_change_mock.__get__ = Mock(return_value="AreaOfChange_testing")
         
         command = sde.AreasOfChangeQuery()
@@ -114,7 +114,7 @@ class TestInsertCacheJob(TestCase):
         
         self.assertEqual(1, len(initial_result), "should only be one area of change")
         
-        command = dto.GetCacheJobFromAreaOfChangeCommand(initial_result)
+        command = dto.GetCacheJobItemsFromAreaOfChangeCommand(initial_result)
         jobs = command.execute()
         
         for job in jobs:

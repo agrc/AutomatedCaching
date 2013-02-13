@@ -56,7 +56,7 @@ class Runner(object):
         print "_process_jobs"
         
         for job in jobs:
-            command = feature_class.InsertCacheJobCommand(job)
+            command = feature_class.InsertCacheJobItemCommand(job)
             command.execute()
         
         return jobs
@@ -85,7 +85,7 @@ class Runner(object):
         """
         print "_process_areas_of_change"
         
-        command = dto.GetCacheJobFromAreaOfChangeCommand(changes)
+        command = dto.GetCacheJobItemsFromAreaOfChangeCommand(changes)
         return command.execute()
 
     def _get_caching_status(self, server = config.Server()):

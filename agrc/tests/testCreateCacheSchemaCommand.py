@@ -4,7 +4,7 @@ from agrc.caching import models
 
 class TestCreateCacheSchemaCommand(TestCase):
     def test_schema_gets_default_values(self):
-        job = models.CacheJob([0,1,2], "terrain")
+        job = models.CacheJobItem([0,1,2], "terrain")
         command = cache.CreateCacheSchemaCommand(job)
         
         self.assertEqual(command.tile_origin, "-5120900 9998100", "orgin")

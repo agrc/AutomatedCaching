@@ -41,7 +41,7 @@ class AreaOfChange(object):
     #: the date the area was updated. ie: when the new cache tiles were created
     completion_date = None
     
-class CacheJob(object):
+class CacheJobItem(object):
     """
         A representation of a cache service that is going to be updated
     """
