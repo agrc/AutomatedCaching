@@ -15,16 +15,19 @@ class GetMapNamesContainingLayerCommand(Command):
         return {
                  'ROADS': 
                      {
-                      0: ["terrain", "vector", "hybrid"],
-                      1: ["terrain", "vector", "hybrid"]
+                      "terrain": [0,1],
+                      "vector": [0,1],
+                      "hybrid": [0,1]
                      }, 
                  'COUNTIES': 
                     {
-                     0: ["terrain", "vector", "hybrid"]
+                     "terrain": [0],
+                     "vector": [0],
+                     "hybrid": [0]
                     },
                  'MUNICIPALITIES': 
                     {
-                     0: ["terrain"]
+                     "terrain": [0]
                     }
                  }
     
