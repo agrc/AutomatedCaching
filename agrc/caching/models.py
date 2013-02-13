@@ -90,7 +90,7 @@ class CacheJob(object):
     update_mode = None
     
     def get_scales_from_levels(self):
-        command = scales.GetUtmScaleFromLevelCommand(self.level)
+        command = scales.GetUtmScaleFromLevelCommand([self.level])
         return command.execute()
 
     scales = property(get_scales_from_levels, None)

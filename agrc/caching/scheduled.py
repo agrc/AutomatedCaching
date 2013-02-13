@@ -1,5 +1,6 @@
 from agrc.caching.commands import cache
 from agrc.caching.commands import dto
+from agrc.caching.commands import feature_class
 from agrc.caching.queries import sde
 from agrc.caching import config
 
@@ -55,9 +56,8 @@ class Runner(object):
         print "_process_jobs"
         
         for job in jobs:
-            for service in job.service_name:
-                command = sde.InsertCacheJob(job, service)
-                command.execute()
+            command = feature_class.InsertCacheJobCommand(job)
+            command.execute()
         
         return jobs
     

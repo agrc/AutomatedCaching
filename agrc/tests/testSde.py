@@ -1,6 +1,8 @@
 from unittest import TestCase, main
 from mock import patch, Mock
 from agrc.caching.queries import sde
+from agrc.caching.commands import feature_class
+from agrc.caching.commands import dto
 from agrc.caching.config import Geodatabase
 from arcpy import env
 from arcpy import Copy_management as copy_fc
@@ -74,11 +76,11 @@ class TestSde(TestCase):
         self.assertEqual(len(result), 0, "There is only one area of change needing attention")
     
 class TestInsertCacheJob(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        env.workspace = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
+    def setUp(self):
+        place = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
+        env.workspace = place
         try:
-            create_fc(env.workspace, "CacheJob_Inserts_testing", template="CacheJob_Inserts")
+            create_fc(place, "CacheJob_Inserts_testing", template="CacheJob_Inserts")
         except ExecuteError:
             "cache jobs not created"
         
@@ -87,8 +89,7 @@ class TestInsertCacheJob(TestCase):
         except ExecuteError:
             "changes not created"
         
-    @classmethod
-    def tearDownClass(cls):
+    def tearDown(self):
         env.workspace = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
         try:
             delete_fc("CacheJob_Inserts_testing")
@@ -106,7 +107,24 @@ class TestInsertCacheJob(TestCase):
     def test_can_insert_into_gdb(self, path_mock, fc_change_mock, fc_job_mock):       
         path_mock.__get__ = Mock(return_value="\Test_AreaOfChange.gdb")
         fc_job_mock.__get__ = Mock(return_value="CacheJob_Inserts_testing")
-        fc_change_mock.__get__ = Mock(return_value="AreaOfChange_Sorting")
+        fc_change_mock.__get__ = Mock(return_value="AreaOfChange_testing")
+        
+        command = sde.AreasOfChangeQuery()
+        initial_result = command.execute()
+        
+        self.assertEqual(1, len(initial_result), "should only be one area of change")
+        
+        command = dto.GetCacheJobFromAreaOfChangeCommand(initial_result)
+        jobs = command.execute()
+        
+        for job in jobs:
+            command = feature_class.InsertCacheJobCommand(job)
+            command.execute()
+        
+        command = sde.AreasOfChangeQuery()
+        end_result = command.execute()
+        
+        self.assertLess(len(end_result), len(initial_result), "all the areas of change should be marked as started")
         
 if __name__=='__main__':
     main()
