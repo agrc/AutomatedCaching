@@ -10,23 +10,21 @@ class TestLayer(TestCase):
                                 {
                                  'ROADS': 
                                      {
-                                      0: ["a", "b"],
-                                      1: ["c", "b"],
-                                      2: ["d", "c"],
-                                      3: ["e", "a"],
-                                      4: ["1"],
-                                      5: ["f"]
+                                      "a": [0,3],
+                                      "b": [0,1],
+                                      "c": [1,2]
                                      }
                                  })
         
-        command = layer.GetMapNamesContainingLayerCommand(layer = "roads", levels=[0,1,2,3])
+        command = layer.GetMapNamesContainingLayerCommand(layer = "roads")
         result = command.execute()
         
         for i in result:
             print i
         
-        self.assertEqual(len(result), len(["a","b","c","d","e"]), "lists are different")
-        self.assertItemsEqual(result, ["a","b","c","d","e"], "list don't contain same elements")
+        self.assertEqual(len(result), len(["a","b","c"]), "lists are different")
+        self.assertItemsEqual([0,3], result["a"], "arrays are different")
+        self.assertItemsEqual({"a": [0,3],"b": [0,1],"c": [1,2]}, result, "list don't contain same elements")
 
 if __name__=='__main__':
     main()
