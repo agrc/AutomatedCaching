@@ -47,16 +47,12 @@ class ProcessCacheJobItemsCommand(Command):
         :keyword arcpy: see :attr:`arcpy`.
     """
     
-    #: area of change 
-    changes = None
+    #: cache job items
+    items = None
     
-    #: arcgis python module
-    arcpy = None
-    
-    def __init__(self, changes, arcpy):
-        self.changes = changes
-        self.arcpy = arcpy
-    
+    def __init__(self, items):
+        self.items = items
+
     def execute(self):
         pass
         

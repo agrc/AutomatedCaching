@@ -1,19 +1,16 @@
 from unittest import TestCase, main
 from mock import patch, Mock
 from agrc.caching.queries import sde
-from agrc.caching.commands import feature_class
-from agrc.caching.commands import dto
+from agrc.caching.commands import feature_class,dto
 from agrc.caching.config import Geodatabase
-from arcpy import env
-from arcpy import Copy_management as copy_fc
-from arcpy import Delete_management as delete_fc
-from arcpy import CreateFeatureclass_management as create_fc
-from arcpy import ExecuteError
+from agrc.caching import models
+from arcpy import env, Delete_management as delete_fc, CreateFeatureclass_management as create_fc,ExecuteError
 from os import path
-from nose.tools import nottest
 
-@nottest
-class TestSde(TestCase):
+from agrc.tests import seedGdb
+from datetime import datetime
+
+class estSde(TestCase):
     
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
@@ -77,35 +74,62 @@ class TestSde(TestCase):
     
 class TestInsertCacheJob(TestCase):
     def setUp(self):
-        place = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
-        env.workspace = place
+        place = path.join(path.abspath(path.dirname(__file__)), "..\..", "data")
+        
+        out = path.join(place, "Test_AreaOfChange.gdb")
+        template_path = path.join(place, "AreasOfChange.gdb\CacheJobItems")
+        
         try:
-            create_fc(place, "CacheJobItems_testing", template="CacheJobItems")
+            create_fc(out_path = out, out_name = "Test_CacheJobItems", template = template_path) 
         except ExecuteError:
             "cache jobs not created"
         
+        template_path = path.join(place, "AreasOfChange.gdb\AreasOfChange")
+        
         try:
-            copy_fc("AreaOfChange_HasChanges", "AreaOfChange_testing")
+            create_fc(out_path = out, out_name = "Test_AreasOfChange", template = template_path) 
         except ExecuteError:
             "changes not created"
         
     def tearDown(self):
         env.workspace = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
         try:
-            delete_fc("CacheJobItems_testing")
+            delete_fc("Test_CacheJobItems")
         except ExecuteError:
             "job not deleted"
         
         try:
-            delete_fc("AreaOfChange_testing")
+            delete_fc("Test_AreasOfChange")
         except ExecuteError:
             "changes not deleted"
-     
+    
     @patch.object(Geodatabase,'job_feature_class')
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
-    def test_can_insert_into_gdb(self, path_mock, fc_change_mock, fc_job_mock):       
-        path_mock.__get__ = Mock(return_value="\Test_AreaOfChange.gdb")
+    def test_seeding(self, path_mock, fc_change_mock, fc_job_mock):
+        path_mock.__get__ = Mock(return_value="\Test_AreasOfChange.gdb")
+        fc_job_mock.__get__ = Mock(return_value="Test_CacheJobItems")
+        fc_change_mock.__get__ = Mock(return_value="Test_AreasOfChange")
+        
+        seedGdb.SeedAreaOfChange([models.AreaOfChange(row=[1,
+                                                          datetime.now(),
+                                                          None,
+                                                          None,
+                                                          "Roads",
+                                                          "Steve",
+                                                          [
+                                                           [324260.346,4577721.286],
+                                                           [365270.845,4600210.914],
+                                                           [416536.520,4556181.180],
+                                                           [363286.466,4515544.078]
+                                                          ]])])
+        pass
+    
+    @patch.object(Geodatabase,'job_feature_class')
+    @patch.object(Geodatabase,'change_feature_class')
+    @patch.object(Geodatabase,'changes_path')
+    def can_insert_into_gdb(self, path_mock, fc_change_mock, fc_job_mock):       
+        path_mock.__get__ = Mock(return_value="\Test_AreasOfChange.gdb")
         fc_job_mock.__get__ = Mock(return_value="CacheJobItems_testing")
         fc_change_mock.__get__ = Mock(return_value="AreaOfChange_testing")
         

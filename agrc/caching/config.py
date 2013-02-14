@@ -114,6 +114,14 @@ class Geodatabase(object):
 	def change_feature_class(self):
 		return "AreasOfChange"
 	
+	def change_schema(self, include_shape = False):
+		fields = ['StartDate','CreationDate','CompletionDate','Layer','Editor']
+		
+		if include_shape:
+			fields.append('SHAPE@')
+			
+		return fields 
+	
 	#: the name of the feature class for caching jobs
 	@property
 	def job_feature_class(self):

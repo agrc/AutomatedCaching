@@ -14,9 +14,9 @@ class AreaOfChange(object):
             self.start_date = row[2]
             self.completion_date = row[3]
             self.layer = row[4]
-            self.editor = row[6]
-            if len(row) == 8:
-                self.shape = row[7]
+            self.editor = row[5]
+            if len(row) == 7:
+                self.shape = row[6]
 
         self.layer = layer or self.layer
         
@@ -29,17 +29,17 @@ class AreaOfChange(object):
     #: day it was picked up to a cache job
     start_date = None
     
-    #: the geometry of the area where there are positive and negative changes
-    shape = None
-    
-    #: the creator of the changes
-    editor = None
+    #: the date the area was updated. ie: when the new cache tiles were created
+    completion_date = None
     
     #: the layer the change happened on
     layer = None #enum
+        
+    #: the creator of the changes
+    editor = None    
     
-    #: the date the area was updated. ie: when the new cache tiles were created
-    completion_date = None
+    #: the geometry of the area where there are positive and negative changes
+    shape = None
     
 class CacheJobItem(object):
     """

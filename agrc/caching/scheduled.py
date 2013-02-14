@@ -57,10 +57,6 @@ class Runner(object):
         """
         print "_process_job_items"
         
-        
-            
-        
-    
     def _cache_job(self, job):
         """
             Updates the cache data, 
