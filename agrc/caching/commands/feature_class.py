@@ -6,7 +6,7 @@ from datetime import datetime
 
 class InsertCacheJobItemCommand(Command):
     """
-        Responsible for creating records in cache job feature class
+        Responsible for creating records in cache job items feature class
     """
     
     #: cache job

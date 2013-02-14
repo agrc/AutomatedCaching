@@ -37,9 +37,11 @@ class Runner(object):
         
         print "There are {0} areas of change. Processing...".format(total_changes)
         
-        jobs = self._process_areas_of_change(changes)
+        self._process_areas_of_change(changes)
         
-        jobs = self._process_jobs(jobs)
+        
+        
+        self._process_job_items()
         
         #: requery gdb for updated items
 #        for job in jobs:
@@ -48,18 +50,16 @@ class Runner(object):
     
         print "done"
     
-    def _process_jobs(self, jobs):
+    def _process_job_items(self, jobs):
         """
             Handles the cache jobs. Inserts the records into the database
             Modifies the geometries
         """
-        print "_process_jobs"
+        print "_process_job_items"
         
-        for job in jobs:
-            command = feature_class.InsertCacheJobItemCommand(job)
-            command.execute()
         
-        return jobs
+            
+        
     
     def _cache_job(self, job):
         """
@@ -81,18 +81,29 @@ class Runner(object):
         
     def _process_areas_of_change(self, changes):
         """
-           Turns the areas of change into cache jobs 
+           Turns the areas of change into cache job items and inserts them
+           into the cache job items feature class
         """
         print "_process_areas_of_change"
         
         command = dto.GetCacheJobItemsFromAreaOfChangeCommand(changes)
-        return command.execute()
+        items = command.execute()
+    
+        for item in items:
+            command = feature_class.InsertCacheJobItemCommand(item)
+            command.execute()
 
     def _get_caching_status(self, server = config.Server()):
         print "_get_caching_status"
         
         command = cache.CacheStatusCommand(server)
         return command.execute()
+    
+    def _get_job_items(self):
+        print "_get_job_items"
+        
+        query = sde.CacheJobItemsQuery()
+        return query.execute()
     
     def _get_changes(self):
         print "_get_changes"

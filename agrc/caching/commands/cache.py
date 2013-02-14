@@ -38,7 +38,7 @@ class CacheStatusCommand(Command):
         
         return False
     
-class ProcessChangeGeometryCommand(Command):
+class ProcessCacheJobItemsCommand(Command):
     """
         Command to possibly normalize and dissolve geometries to be cached
         This class may be unused not sure yet.

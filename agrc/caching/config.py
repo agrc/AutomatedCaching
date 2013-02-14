@@ -117,4 +117,4 @@ class Geodatabase(object):
 	#: the name of the feature class for caching jobs
 	@property
 	def job_feature_class(self):
-		return "CacheJobItem"
+		return "CacheJobItems"
