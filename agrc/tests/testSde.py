@@ -118,7 +118,7 @@ class TestInsertCacheJob(TestCase):
         jobs = command.execute()
         
         for job in jobs:
-            command = feature_class.InsertCacheJobCommand(job)
+            command = feature_class.InsertCacheJobItemCommand(job)
             command.execute()
         
         command = sde.AreasOfChangeQuery()
