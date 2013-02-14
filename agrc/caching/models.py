@@ -1,5 +1,4 @@
 from agrc.caching.commands import scales
-from agrc.caching.commands import layer
 
 class AreaOfChange(object):
     """

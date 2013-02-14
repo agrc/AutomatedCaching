@@ -1,26 +1,35 @@
 from agrc.caching import config
 from arcpy import arcpy
 from arcpy.da import InsertCursor
+from os import path
 
 class SeedAreaOfChange(object):
-    def __init__(self, changes):
+    def __init__(self,base_path,gdb_name,fc_name):
+        self.base_path = base_path
+        self.gdb_name = gdb_name
+        self.fc_name = fc_name
+    
+    def seed(self, changes):
         settings = config.Geodatabase()
-        path = "{0}{1}".format(settings.base_path, settings.changes_path)
+        place = path.join(self.base_path, self.gdb_name)
         
-        arcpy.env.workspace = path
+        arcpy.env.workspace = place
        
-        with InsertCursor(settings.change_feature_class, settings.change_schema(include_shape=True)) as inserter:
+        with InsertCursor(self.fc_name, settings.change_schema(include_shape=True, include_oid = False)) as inserter:
             for change in changes:
-                row = (change.start_date,
-                                    change.creation_date,
-                                    change.completion_date,
-                                    change.layer,
-                                    change.editor,
-                                    self.create_polygon(change.shape)
-                                    )
+                row = (change.creation_date,
+                        change.start_date,
+                        change.completion_date,
+                        change.layer,
+                        change.editor,
+                        self.create_polygon(change.shape)
+                        )
                 inserter.insertRow(row)
             
     def create_polygon(self, coordinates):
+        if coordinates is None:
+            return None
+        
         # Create empty Point and Array objects
         point = arcpy.Point()
         array = arcpy.Array()

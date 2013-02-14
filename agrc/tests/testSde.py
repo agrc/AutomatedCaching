@@ -10,38 +10,102 @@ from os import path
 from agrc.tests import seedGdb
 from datetime import datetime
 
-class estSde(TestCase):
+class TestSde(TestCase):
+    test_gdb = "Test_AreasOfChange.gdb"
+    test_job_items_fc = "Test_CacheJobItems"
+    test_changes_fc = "Test_AreasOfChange"
+    base_path = path.join(path.abspath(path.dirname(__file__)), "..\..", "data")
+    seeder = seedGdb.SeedAreaOfChange(base_path, test_gdb, test_changes_fc)
+    def setUp(self):
+        out = path.join(self.base_path, self.test_gdb)
+        template_path = path.join(self.base_path, "AreasOfChange.gdb\CacheJobItems")
+        
+        try:
+            create_fc(out_path = out, 
+                      out_name = self.test_job_items_fc, 
+                      template = template_path,
+                      spatial_reference = template_path) 
+        except ExecuteError:
+            "cache jobs not created"
+        
+        template_path = path.join(self.base_path, "AreasOfChange.gdb\AreasOfChange")
+        
+        try:
+            create_fc(out_path = out, 
+                      out_name = self.test_changes_fc, 
+                      template = template_path,
+                      spatial_reference = template_path) 
+        except ExecuteError:
+            "changes not created"
+            
+        
+        self.seeder.seed([models.AreaOfChange(row=[1,
+                                              datetime(2011,1,1),
+                                              None,
+                                              None,
+                                              "Roads",
+                                              "Steve"
+                                              ])])
+        self.seeder.seed([models.AreaOfChange(row=[2,
+                                              datetime(2013,1,1),
+                                              datetime.now(),
+                                              None,
+                                              "Counties",
+                                              "Steve"
+                                              ])])
+        self.seeder.seed([models.AreaOfChange(row=[3,
+                                              datetime(2012,1,1),
+                                              datetime.now(),
+                                              None,
+                                              "Municipalities",
+                                              "Steve"
+                                              ])])
+        
+    def tearDown(self):
+        env.workspace = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
+        try:
+            delete_fc(self.test_job_items_fc)
+        except ExecuteError:
+            "job not deleted"
+        
+        try:
+            delete_fc(self.test_changes_fc)
+        except ExecuteError:
+            "changes not deleted"
     
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
-    def test_command_can_connect_to_file_gdb(self, path_mock, fc_mock):       
-        path_mock.__get__ = Mock(return_value="\Test_AreaOfChange.gdb")
-        fc_mock.__get__ = Mock(return_value="AreaOfChange_Sorting")
+    def test_command_can_connect_to_file_gdb(self, path_mock, fc_mock):
+        path_mock.__get__ = Mock(return_value="Test_AreasOfChange.gdb")
+        fc_mock.__get__ = Mock(return_value="Test_AreasOfChange")
 
         query = sde.AreasOfChangeQuery()
         result = query.execute()
         
         self.assertIsNotNone(result, "query is broken")
-        self.assertEqual(len(result), 3, "no areas of change")
-        
-        for i in result:
-            if i.id == 1:
-                self.assertTrue(i.creation_date.isoformat().startswith("2013-01-01"), "date is off")
-                self.assertEqual(i.start_date, None, "start date off")
-                self.assertEqual(i.completion_date, None, "completion off")
-                self.assertEqual(i.layer, "Roads", "layer is offf")
-                self.assertEqual(i.levels, [0,1,2], "levels off")
-                self.assertEqual(i.editor, "User1", "user is off")
-                
-                return
-        
-        self.assertTrue(False, "shouldn't get here")
+        self.assertEqual(len(result), 1, "no areas of change")
+
 
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
     def test_can_sort(self, path_mock, fc_mock):       
-        path_mock.__get__ = Mock(return_value="\Test_AreaOfChange.gdb")
-        fc_mock.__get__ = Mock(return_value="AreaOfChange_Sorting")
+        path_mock.__get__ = Mock(return_value="Test_AreasOfChange.gdb")
+        fc_mock.__get__ = Mock(return_value="Test_AreasOfChange")
+        
+        self.seeder.seed([models.AreaOfChange(row=[4,
+                                              datetime(2013,1,1),
+                                              None,
+                                              None,
+                                              "Counties",
+                                              "Steve"
+                                              ])])
+        self.seeder.seed([models.AreaOfChange(row=[5,
+                                              datetime(2012,1,1),
+                                              None,
+                                              None,
+                                              "Municipalities",
+                                              "Steve"
+                                              ])])
 
         query = sde.AreasOfChangeQuery()
         result = query.execute()
@@ -52,8 +116,8 @@ class estSde(TestCase):
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
     def test_gets_changes_properly(self, path_mock, fc_mock):
-        path_mock.__get__ = Mock(return_value="\Test_AreaOfChange.gdb")
-        fc_mock.__get__ = Mock(return_value="AreaOfChange_HasChanges")
+        path_mock.__get__ = Mock(return_value="Test_AreasOfChange.gdb")
+        fc_mock.__get__ = Mock(return_value="Test_AreasOfChange")
 
         query = sde.AreasOfChangeQuery()
         result = query.execute()
@@ -61,57 +125,36 @@ class estSde(TestCase):
         self.assertEqual(len(result), 1, "There is only one area of change needing attention")
         self.assertEqual(result[0].layer, "Roads", "Wrong change")
     
-    @patch.object(Geodatabase,'change_feature_class')
-    @patch.object(Geodatabase,'changes_path')
-    def test_gets_changes_properly_where_none_are_there(self, path_mock, fc_mock):
-        path_mock.__get__ = Mock(return_value="\Test_AreaOfChange.gdb")
-        fc_mock.__get__ = Mock(return_value="AreaOfChange_NoChanges")
-
-        query = sde.AreasOfChangeQuery()
-        result = query.execute()
-        
-        self.assertEqual(len(result), 0, "There is only one area of change needing attention")
-    
 class TestInsertCacheJob(TestCase):
+    test_gdb = "Test_AreasOfChange.gdb"
+    test_job_items_fc = "Test_CacheJobItems"
+    test_changes_fc = "Test_AreasOfChange"
+    base_path = path.join(path.abspath(path.dirname(__file__)), "..\..", "data")
+    
     def setUp(self):
-        place = path.join(path.abspath(path.dirname(__file__)), "..\..", "data")
-        
-        out = path.join(place, "Test_AreaOfChange.gdb")
-        template_path = path.join(place, "AreasOfChange.gdb\CacheJobItems")
+        out = path.join(self.base_path, self.test_gdb)
+        template_path = path.join(self.base_path, "AreasOfChange.gdb\CacheJobItems")
         
         try:
-            create_fc(out_path = out, out_name = "Test_CacheJobItems", template = template_path) 
+            create_fc(out_path = out, 
+                      out_name = self.test_job_items_fc, 
+                      template = template_path,
+                      spatial_reference = template_path) 
         except ExecuteError:
             "cache jobs not created"
         
-        template_path = path.join(place, "AreasOfChange.gdb\AreasOfChange")
+        template_path = path.join(self.base_path, "AreasOfChange.gdb\AreasOfChange")
         
         try:
-            create_fc(out_path = out, out_name = "Test_AreasOfChange", template = template_path) 
+            create_fc(out_path = out, 
+                      out_name = self.test_changes_fc, 
+                      template = template_path,
+                      spatial_reference = template_path) 
         except ExecuteError:
             "changes not created"
-        
-    def tearDown(self):
-        env.workspace = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
-        try:
-            delete_fc("Test_CacheJobItems")
-        except ExecuteError:
-            "job not deleted"
-        
-        try:
-            delete_fc("Test_AreasOfChange")
-        except ExecuteError:
-            "changes not deleted"
-    
-    @patch.object(Geodatabase,'job_feature_class')
-    @patch.object(Geodatabase,'change_feature_class')
-    @patch.object(Geodatabase,'changes_path')
-    def test_seeding(self, path_mock, fc_change_mock, fc_job_mock):
-        path_mock.__get__ = Mock(return_value="\Test_AreasOfChange.gdb")
-        fc_job_mock.__get__ = Mock(return_value="Test_CacheJobItems")
-        fc_change_mock.__get__ = Mock(return_value="Test_AreasOfChange")
-        
-        seedGdb.SeedAreaOfChange([models.AreaOfChange(row=[1,
+            
+        seeder = seedGdb.SeedAreaOfChange(self.base_path, self.test_gdb, self.test_changes_fc)
+        seeder.seed([models.AreaOfChange(row=[1,
                                                           datetime.now(),
                                                           None,
                                                           None,
@@ -123,15 +166,26 @@ class TestInsertCacheJob(TestCase):
                                                            [416536.520,4556181.180],
                                                            [363286.466,4515544.078]
                                                           ]])])
-        pass
+        
+    def tearDown(self):
+        env.workspace = path.join(path.abspath(path.dirname(__file__)), "..\..", "data\Test_AreaOfChange.gdb")
+        try:
+            delete_fc(self.test_job_items_fc)
+        except ExecuteError:
+            "job not deleted"
+        
+        try:
+            delete_fc(self.test_changes_fc)
+        except ExecuteError:
+            "changes not deleted"
     
     @patch.object(Geodatabase,'job_feature_class')
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
     def can_insert_into_gdb(self, path_mock, fc_change_mock, fc_job_mock):       
-        path_mock.__get__ = Mock(return_value="\Test_AreasOfChange.gdb")
-        fc_job_mock.__get__ = Mock(return_value="CacheJobItems_testing")
-        fc_change_mock.__get__ = Mock(return_value="AreaOfChange_testing")
+        path_mock.__get__ = Mock(return_value = self.test_gdb)
+        fc_job_mock.__get__ = Mock(return_value = self.test_job_items_fc)
+        fc_change_mock.__get__ = Mock(return_value = self.test_changes_fc)
         
         command = sde.AreasOfChangeQuery()
         initial_result = command.execute()

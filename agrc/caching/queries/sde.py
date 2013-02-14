@@ -3,6 +3,7 @@ from agrc.caching import config
 from agrc.caching import models
 from arcpy import env
 from arcpy.da import SearchCursor
+from os import path
 
 class AreasOfChangeQuery(Command):
     """
@@ -16,10 +17,10 @@ class AreasOfChangeQuery(Command):
     
     def _query_sde_for_new_changes(self):      
         settings = config.Geodatabase()
-        env.workspace = "{0}{1}".format(settings.base_path, settings.changes_path)
+        env.workspace = path.join(settings.base_path, settings.changes_path)
         
         changes = []
-        with SearchCursor(settings.change_feature_class, self._fields,
+        with SearchCursor(settings.change_feature_class, settings.change_schema(include_shape=False, include_oid = True),
                              where_clause = self._where_clause) as cursor:
             for row in cursor:
                 change = models.AreaOfChange(row = row)
@@ -28,10 +29,6 @@ class AreasOfChangeQuery(Command):
         changes = sorted(changes, key=lambda change: change.creation_date)   
         
         return changes
-    
-    @property
-    def _fields(self):
-        return ['OID@', 'CreationDate', 'StartDate', 'CompletionDate', 'Layer', 'Levels', 'Editor']
     
     @property
     def _where_clause(self):      

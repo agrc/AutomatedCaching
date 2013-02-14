@@ -50,7 +50,7 @@ class Runner(object):
     
         print "done"
     
-    def _process_job_items(self, jobs):
+    def _process_job_items(self):
         """
             Handles the cache jobs. Inserts the records into the database
             Modifies the geometries
