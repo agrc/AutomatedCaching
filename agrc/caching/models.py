@@ -1,4 +1,5 @@
 from agrc.caching.commands import scales
+from datetime import datetime
 
 class AreaOfChange(object):
     """
@@ -40,19 +41,16 @@ class AreaOfChange(object):
     #: the geometry of the area where there are positive and negative changes
     shape = None
     
-class CacheJobItem(object):
+class CacheJob(object):
     """
         A representation of a cache service that is going to be updated
     """
     
-    def __init__(self, level = None, service_name = None, change = None, object_id = None):
-        if change is not None:
-            self.creation_date = change.creation_date
-            self.start_date = "current date"
-            self.layer = change.layer
-            self.editor = change.editor
-            self.reference_id = change.id
-            self.level = level
+    def __init__(self, level = None, service_name = None, job_item = None, object_id = None):
+        if job_item is not None:
+            self.creation_date = datetime.now()
+            self.reference_id = job_item.id
+            self.scale = self.get_scales_from_levels(level)
                   
         self.level = level or self.level
         self.service_name = service_name
@@ -67,11 +65,8 @@ class CacheJobItem(object):
     #: the geometry to update
     shape = None
     
-    #: the level to recache
-    level = None
-    
-    #: the layer of change
-    layer = None
+    #: the scale to recache
+    scale = None
     
     #: the date the job was created
     creation_date = None
@@ -82,14 +77,35 @@ class CacheJobItem(object):
     #: the date the job finished
     completion_date = None
     
-    #: the person who created the change
-    editor = None
-    
     #: whether to recreate all tiles or just empty ones
     update_mode = None
     
-    def get_scales_from_levels(self):
-        command = scales.GetUtmScaleFromLevelCommand([self.level])
+    def get_scales_from_levels(self, level):
+        command = scales.GetUtmScaleFromLevelCommand([level])
         return command.execute()
 
-    scales = property(get_scales_from_levels, None)
+class CacheJobItem(object):
+    """
+        The intermediate step before an area of change becomes a caching item.
+        this allows us to dissolve, clip, whatever
+    """   
+    
+    def __init__(self, level, service_name, change):     
+        self.service_name = service_name
+        self.reference_id = change.id
+        self.shape = change.shape
+        self.level = level
+         
+    #: the cache level to recache
+    level = None
+    
+    #: the name of the map service to cache    
+    service_name = None
+    
+    #: the id of the area of change that created this item
+    reference_id = None
+    
+    #: the geometry of the area of change
+    shape = None
+    
+    

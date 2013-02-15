@@ -17,10 +17,11 @@ class TestScheduleRunner(TestCase):
         assert cache_mock.called
         assert not query_mock.called
     
+    @patch('agrc.caching.scheduled.sde.CacheJobItemsQuery')
     @patch('agrc.caching.scheduled.dto.GetCacheJobItemsFromAreaOfChangeCommand')
     @patch('agrc.caching.scheduled.sde.AreasOfChangeQuery')
-    @patch('agrc.caching.scheduled.cache.CacheStatusCommand')  
-    def test_areas_of_change_queried_if_not_caching(self, cache_mock, query_mock, job_mock):
+    @patch('agrc.caching.scheduled.cache.CacheStatusCommand')
+    def test_areas_of_change_queried_if_not_caching(self, cache_mock, query_mock, job_mock,job_query_mock):
         cache_instance = cache_mock.return_value
         cache_instance.execute.return_value = False
         
@@ -29,6 +30,9 @@ class TestScheduleRunner(TestCase):
         
         job_instance = job_mock.return_value
         job_instance.execute.return_value = []
+        
+        job_query_instance = job_query_mock.return_value
+        job_query_instance.execute.return_value = []
         
         s = Runner()        
         s.start()

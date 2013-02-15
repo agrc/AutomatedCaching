@@ -39,8 +39,6 @@ class Runner(object):
         
         self._process_areas_of_change(changes)
         
-        
-        
         self._process_job_items()
         
         #: requery gdb for updated items
@@ -52,10 +50,14 @@ class Runner(object):
     
     def _process_job_items(self):
         """
-            Handles the cache jobs. Inserts the records into the database
-            Modifies the geometries
+            Handles the cache job items. Dissolves the jobs based on level and map
+            Clips the geometries to the cache level extents
+            Inserts the result into the cache jobs feature class
         """
         print "_process_job_items"
+        
+        query = sde.CacheJobItemsQuery()
+        items = query.execute()
         
     def _cache_job(self, job):
         """

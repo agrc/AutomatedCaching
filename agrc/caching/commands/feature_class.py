@@ -17,7 +17,7 @@ class InsertCacheJobItemCommand(Command):
     
     def execute(self):
         settings = config.Geodatabase()
-        path = "{0}{1}".format(settings.base_path, settings.changes_path)
+        path = "{0}{1}".format(settings.base_path, settings.changes_gdb_path)
         
         env.workspace = path
         edit = Editor(path)

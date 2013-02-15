@@ -17,7 +17,7 @@ class AreasOfChangeQuery(Command):
     
     def _query_sde_for_new_changes(self):      
         settings = config.Geodatabase()
-        env.workspace = path.join(settings.base_path, settings.changes_path)
+        env.workspace = path.join(settings.base_path, settings.changes_gdb_path)
         
         changes = []
         with SearchCursor(settings.change_feature_class, settings.change_schema(include_shape=False, include_oid = True),
@@ -46,11 +46,10 @@ class CacheJobItemsQuery(Command):
     
     def _query_sde_for_new_changes(self):      
         settings = config.Geodatabase()
-        env.workspace = "{0}{1}".format(settings.base_path, settings.changes_path)
+        env.workspace = path.join(settings.base_path, settings.changes_gdb_path)
         
         changes = []
-        with SearchCursor(settings.job_feature_class, self._fields,
-                             where_clause = self._where_clause) as cursor:
+        with SearchCursor(settings.item_feature_class, settings.items_schema()) as cursor:
             for row in cursor:
                 change = models.AreaOfChange(row = row)
                 changes.append(change)
@@ -58,11 +57,3 @@ class CacheJobItemsQuery(Command):
         changes = sorted(changes, key=lambda change: change.creation_date)   
         
         return changes
-    
-    @property
-    def _fields(self):
-        return ['StartDate','Levels','MapService','UpdateMode','SHAPE@']
-    
-    @property
-    def _where_clause(self):      
-        return "StartDate Is NULL"

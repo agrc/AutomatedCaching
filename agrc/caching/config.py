@@ -106,13 +106,18 @@ class Geodatabase(object):
 	
 	#: the path to where the gdb is sitting - will need to modify this for sde probably
 	@property
-	def changes_path(self):
+	def changes_gdb_path(self):
 		return "\AreasOfChange.gdb"
 	
 	#: the name of the feature class for changes
 	@property
 	def change_feature_class(self):
 		return "AreasOfChange"
+	
+	#: the name of the feature class for caching job items
+	@property
+	def item_feature_class(self):
+		return "CacheJobItems"
 	
 	def items_schema(self, include_shape = False, include_oid = False):
 		fields =  ['Level','MapService','ReferenceId']
@@ -132,7 +137,4 @@ class Geodatabase(object):
 			
 		return fields
 	
-	#: the name of the feature class for caching jobs
-	@property
-	def job_feature_class(self):
-		return "CacheJobItems"
+	

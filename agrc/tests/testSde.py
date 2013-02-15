@@ -74,7 +74,7 @@ class TestSde(TestCase):
             "changes not deleted"
     
     @patch.object(Geodatabase,'change_feature_class')
-    @patch.object(Geodatabase,'changes_path')
+    @patch.object(Geodatabase,'changes_gdb_path')
     def test_command_can_connect_to_file_gdb(self, path_mock, fc_mock):
         path_mock.__get__ = Mock(return_value="Test_AreasOfChange.gdb")
         fc_mock.__get__ = Mock(return_value="Test_AreasOfChange")
@@ -87,7 +87,7 @@ class TestSde(TestCase):
 
 
     @patch.object(Geodatabase,'change_feature_class')
-    @patch.object(Geodatabase,'changes_path')
+    @patch.object(Geodatabase,'changes_gdb_path')
     def test_can_sort(self, path_mock, fc_mock):       
         path_mock.__get__ = Mock(return_value="Test_AreasOfChange.gdb")
         fc_mock.__get__ = Mock(return_value="Test_AreasOfChange")
@@ -114,7 +114,7 @@ class TestSde(TestCase):
         self.assertLess(result[1].creation_date, result[2].creation_date, "order is wrong")
     
     @patch.object(Geodatabase,'change_feature_class')
-    @patch.object(Geodatabase,'changes_path')
+    @patch.object(Geodatabase,'changes_gdb_path')
     def test_gets_changes_properly(self, path_mock, fc_mock):
         path_mock.__get__ = Mock(return_value="Test_AreasOfChange.gdb")
         fc_mock.__get__ = Mock(return_value="Test_AreasOfChange")
@@ -181,7 +181,7 @@ class TestInsertCacheJobItems(TestCase):
     
     @patch.object(Geodatabase,'job_feature_class')
     @patch.object(Geodatabase,'change_feature_class')
-    @patch.object(Geodatabase,'changes_path')
+    @patch.object(Geodatabase,'changes_gdb_path')
     def updates_change_when_inserted_into_job_items(self, path_mock, fc_change_mock, fc_job_mock):       
         path_mock.__get__ = Mock(return_value = self.test_gdb)
         fc_job_mock.__get__ = Mock(return_value = self.test_job_items_fc)
