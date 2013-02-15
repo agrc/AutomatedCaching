@@ -114,9 +114,16 @@ class Geodatabase(object):
 	def change_feature_class(self):
 		return "AreasOfChange"
 	
+	def items_schema(self, include_shape = False, include_oid = False):
+		fields =  ['Level','MapService','ReferenceId']
+		return self._add_extra_fields(fields, include_shape, include_oid)
+	
 	def change_schema(self, include_shape = False, include_oid = False):
 		fields = ['CreationDate','StartDate','CompletionDate','Layer','Editor']
 		
+		return self._add_extra_fields(fields, include_shape, include_oid)
+	
+	def _add_extra_fields(self, fields, include_shape, include_oid):	
 		if include_shape:
 			fields.append('SHAPE@')
 			
