@@ -125,7 +125,7 @@ class TestSde(TestCase):
         self.assertEqual(len(result), 1, "There is only one area of change needing attention")
         self.assertEqual(result[0].layer, "Roads", "Wrong change")
     
-class TestInsertCacheJob(TestCase):
+class TestInsertCacheJobItems(TestCase):
     test_gdb = "Test_AreasOfChange.gdb"
     test_job_items_fc = "Test_CacheJobItems"
     test_changes_fc = "Test_AreasOfChange"
@@ -182,7 +182,7 @@ class TestInsertCacheJob(TestCase):
     @patch.object(Geodatabase,'job_feature_class')
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_path')
-    def can_insert_into_gdb(self, path_mock, fc_change_mock, fc_job_mock):       
+    def updates_change_when_inserted_into_job_items(self, path_mock, fc_change_mock, fc_job_mock):       
         path_mock.__get__ = Mock(return_value = self.test_gdb)
         fc_job_mock.__get__ = Mock(return_value = self.test_job_items_fc)
         fc_change_mock.__get__ = Mock(return_value = self.test_changes_fc)
@@ -203,6 +203,6 @@ class TestInsertCacheJob(TestCase):
         end_result = command.execute()
         
         self.assertLess(len(end_result), len(initial_result), "all the areas of change should be marked as started")
-        
+
 if __name__=='__main__':
     main()
