@@ -48,12 +48,11 @@ class CacheJobItemsQuery(Command):
         settings = config.Geodatabase()
         env.workspace = path.join(settings.base_path, settings.changes_gdb_path)
         
-        changes = []
+        items = []
         with SearchCursor(settings.item_feature_class, settings.items_schema()) as cursor:
             for row in cursor:
-                change = models.AreaOfChange(row = row)
-                changes.append(change)
+                item = models.CacheJobItem(row = row)
+                items.append(item)
              
-        changes = sorted(changes, key=lambda change: change.creation_date)   
-        
-        return changes
+          
+        return items

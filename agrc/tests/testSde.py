@@ -179,7 +179,7 @@ class TestInsertCacheJobItems(TestCase):
         except ExecuteError:
             "changes not deleted"
     
-    @patch.object(Geodatabase,'job_feature_class')
+    @patch.object(Geodatabase,'item_feature_class')
     @patch.object(Geodatabase,'change_feature_class')
     @patch.object(Geodatabase,'changes_gdb_path')
     def updates_change_when_inserted_into_job_items(self, path_mock, fc_change_mock, fc_job_mock):       
@@ -203,6 +203,49 @@ class TestInsertCacheJobItems(TestCase):
         end_result = command.execute()
         
         self.assertLess(len(end_result), len(initial_result), "all the areas of change should be marked as started")
+
+class TestCachJobItemsQuery(TestCase):
+    test_gdb = "Test_AreasOfChange.gdb"
+    test_job_items_fc = "Test_CacheJobItems"
+    base_path = path.join(path.abspath(path.dirname(__file__)), "..\..", "data")
+    
+    def setUp(self):
+        out = path.join(self.base_path, self.test_gdb)
+        template_path = path.join(self.base_path, "AreasOfChange.gdb\CacheJobItems")
+        
+        try:
+            create_fc(out_path = out, 
+                      out_name = self.test_job_items_fc, 
+                      template = template_path,
+                      spatial_reference = template_path) 
+        except ExecuteError:
+            "cache jobs not created"
+            
+        seeder = seedGdb.SeedCacheJobItems(self.base_path, self.test_gdb, self.test_job_items_fc)
+        seeder.seed([models.CacheJobItem(level = 0, service_name = "terrain",
+                                         change = models.AreaOfChange(row=[1,
+                                                          datetime.now(),
+                                                          None,
+                                                          None,
+                                                          "Roads",
+                                                          "Steve",
+                                                          [
+                                                           [324260.346,4577721.286],
+                                                           [365270.845,4600210.914],
+                                                           [416536.520,4556181.180],
+                                                           [363286.466,4515544.078]
+                                                          ]]))])
+    @patch.object(Geodatabase,'item_feature_class')
+    @patch.object(Geodatabase,'changes_gdb_path')
+    def test_command_queries_items_from_fc(self, path_mock, fc_job_mock):       
+        path_mock.__get__ = Mock(return_value = self.test_gdb)
+        fc_job_mock.__get__ = Mock(return_value = self.test_job_items_fc)
+    
+        query = sde.CacheJobItemsQuery()
+        items = query.execute()
+        
+        self.assertEqual(1, len(items), "queried cache job items successfully")
+        
 
 if __name__=='__main__':
     main()

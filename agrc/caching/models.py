@@ -90,11 +90,17 @@ class CacheJobItem(object):
         this allows us to dissolve, clip, whatever
     """   
     
-    def __init__(self, level, service_name, change):     
-        self.service_name = service_name
-        self.reference_id = change.id
-        self.shape = change.shape
-        self.level = level
+    def __init__(self, level = None, service_name = None, change = None, row = None):
+        if row is not None:
+            self.level = row[0]
+            self.service_name = row[1]
+            self.reference_id = row[2] 
+            self.shape = row[3]    
+            
+        self.service_name = self.service_name or service_name
+        self.reference_id = self.reference_id or change.id
+        self.shape = self.shape or change.shape
+        self.level = self.level or level
          
     #: the cache level to recache
     level = None
