@@ -100,7 +100,8 @@ class CacheJobItem(object):
         self.service_name = self.service_name or service_name
         self.reference_id = self.reference_id or change.id
         self.shape = self.shape or change.shape
-        self.level = self.level or level
+        if self.level is None:
+            self.level = level
          
     #: the cache level to recache
     level = None
@@ -114,4 +115,29 @@ class CacheJobItem(object):
     #: the geometry of the area of change
     shape = None
     
+class IdAndShapeContainer(object):
+    #: the foreign key id to the area of change
+    reference_id = None
+    
+    #: the arcpy polygon
+    shape = None
+    
+    def __init__(self, reference_id, shape):
+        self.reference_id = reference_id
+        self.shape = shape
+        
+class NameAndLevelContainer(object):
+    #: map service name
+    name = None
+    
+    #: the cache level
+    level = None
+    
+    def __init__(self, name, level):
+        self.name = name
+        self.level = level
+        
+    @property
+    def key(self):
+        return "{0}{1}".format(self.name, self.level)
     

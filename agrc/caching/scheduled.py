@@ -56,8 +56,8 @@ class Runner(object):
         """
         print "_process_job_items"
         
-        query = sde.CacheJobItemsQuery()
-        items = query.execute()
+        command = cache.ProcessCacheJobItemsCommand()
+        command.execute()
         
     def _cache_job(self, job):
         """

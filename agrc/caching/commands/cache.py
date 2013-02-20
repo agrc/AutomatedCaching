@@ -1,14 +1,19 @@
+import time
 from agrc.caching.abstraction.base import Command
 from agrc.caching.commands import connect
 from agrc.caching.commands import scales
 from agrc.caching import config
 from agrc.caching import enums
+from agrc.caching import models
 import arcpy
 # http://resources.arcgis.com/en/help/main/10.1/index.html#//005400000004000000
 from arcpy import CreateMapServerCache_server as create_schema
 # http://resources.arcgis.com/en/help/main/10.1/index.html#/Manage_Map_Server_Cache_Tiles/00540000000p000000/
 from arcpy import ManageMapServerCacheTiles_server as create_tiles
-import time
+# http://resources.arcgis.com/en/help/main/10.1/index.html#//00170000005n000000
+from arcpy import Dissolve_management as dissolve
+# http://resources.arcgis.com/en/help/main/10.1/index.html#/Merge/001700000055000000/
+from arcpy import Merge_management as merge
 
 class CacheStatusCommand(Command):
     """
@@ -55,15 +60,38 @@ class ProcessCacheJobItemsCommand(Command):
 
     def execute(self):
         pass
+    
+    def _intersect_geometry_to_scale_extent(self, job_items):
+        pass
+    
+    def _dissolve_geometries(self, job_items):
+        pass
+#        dissolve(in_features, 
+#                 out_feature_class = "in_memory", 
+#                 dissolve_field = ["MapService", "Level"], 
+#                 statistics_fields, 
+#                 multi_part="MULTI_PART", 
+#                 unsplit_lines = "#")
         
-    def _merge_geometries(self, changes):
-        pass
-    
-    def _intersect_geometry_to_scale_extent(self, changes):
-        pass
-    
-    def _dissolve_geometries(self, changes):
-        pass
+    def _group_uniques_by_name_and_level(self, job_items):
+        dissolve_mapping = {}
+        
+        for item in job_items:
+            container = models.NameAndLevelContainer(item.service_name, item.level)
+            
+            if container.key in dissolve_mapping.keys():
+                value = dissolve_mapping[container.key]
+                polygon = value.shape.union(item.shape)
+                value.shape = polygon
+                value.reference_id.append(item.reference_id)
+                
+                dissolve_mapping[container.key] = value
+                continue
+            
+            dissolve_mapping.update({container: 
+                                     models.IdAndShapeContainer([item.reference_id], item.shape)})
+                        
+        return dissolve_mapping
 
 class ProccessJobCommand(Command):
     """
