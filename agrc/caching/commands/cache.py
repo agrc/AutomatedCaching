@@ -64,16 +64,7 @@ class ProcessCacheJobItemsCommand(Command):
     def _intersect_geometry_to_scale_extent(self, job_items):
         pass
     
-    def _dissolve_geometries(self, job_items):
-        pass
-#        dissolve(in_features, 
-#                 out_feature_class = "in_memory", 
-#                 dissolve_field = ["MapService", "Level"], 
-#                 statistics_fields, 
-#                 multi_part="MULTI_PART", 
-#                 unsplit_lines = "#")
-        
-    def _group_uniques_by_name_and_level(self, job_items):
+    def _union_(self, job_items):
         dissolve_mapping = {}
         
         for item in job_items:
