@@ -49,7 +49,7 @@ class CacheJobItemsQuery(Command):
         env.workspace = path.join(settings.base_path, settings.changes_gdb_path)
         
         items = []
-        with SearchCursor(settings.item_feature_class, settings.items_schema()) as cursor:
+        with SearchCursor(settings.item_feature_class, settings.items_schema(include_shape=True)) as cursor:
             for row in cursor:
                 item = models.CacheJobItem(row = row)
                 items.append(item)

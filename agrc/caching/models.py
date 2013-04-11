@@ -95,7 +95,8 @@ class CacheJobItem(object):
             self.level = row[0]
             self.service_name = row[1]
             self.reference_id = row[2] 
-            self.shape = row[3]    
+            if len(row) == 4:
+                self.shape = row[3]    
             
         self.service_name = self.service_name or service_name
         self.reference_id = self.reference_id or change.id

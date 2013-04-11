@@ -64,7 +64,7 @@ class ProcessCacheJobItemsCommand(Command):
     def _intersect_geometry_to_scale_extent(self, job_items):
         pass
     
-    def _union_(self, job_items):
+    def _group_uniques_by_name_and_level(self, job_items):
         dissolve_mapping = {}
         
         for item in job_items:
@@ -79,8 +79,7 @@ class ProcessCacheJobItemsCommand(Command):
                 dissolve_mapping[container.key] = value
                 continue
             
-            dissolve_mapping.update({container: 
-                                     models.IdAndShapeContainer([item.reference_id], item.shape)})
+            dissolve_mapping[container.key] = models.IdAndShapeContainer([item.reference_id], item.shape)
                         
         return dissolve_mapping
 

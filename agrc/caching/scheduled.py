@@ -23,7 +23,7 @@ class Runner(object):
         caching = self._get_caching_status(server)
         
         if caching:
-            print "The server is busy. Exiting"
+            print "The server is busy. The work will have to wait for another day."
             return
         
         print "The server is free. Looking for changes..."
@@ -32,7 +32,7 @@ class Runner(object):
         total_changes = len(changes)
         
         if total_changes == 0:
-            print "There are no changes. Exiting."
+            print "There are no changes. Nothing to do here."
             return
         
         print "There are {0} areas of change. Processing...".format(total_changes)
